@@ -1,27 +1,33 @@
-page-home {
+page-trip {
     .content-background {
         background-color: #f4f4f4;
-    }
-    .user-name {
-        color: lightcoral;
-        font-size: 14pt;
     }
     .trip-name {
         color: red;
         font-size: 14pt;
         font-weight: bold;
     }
-    .trip-description {
+    .story-name {
+        color: hotpink;
+        font-size: 12pt;
+        font-weight: bold;
+    }
+    .story-description {
         color: lightslategray;
         font-size: 10pt;
         margin-top: 3px;
     }
-    .trip-user {
-        color: lightcoral;
-        font-size: 8pt; 
+    .media-name {
+        color: hotpink;
+        font-size: 12pt;
     }
-    .trip-date {
+    .info {
         color: gray;
         font-size: 8pt; 
+    }
+    .date {
+        color: gray;
+        font-size: 8pt;
+        padding: 2px; 
     }
 }

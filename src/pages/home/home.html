@@ -1,14 +1,42 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      iTrip
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content class="content-background">
+
+  <ion-item>
+    <ion-avatar item-start>
+      <img src="assets/imgs/avater-example.png">
+    </ion-avatar>
+    <div class="user-name">{{userName}}</div>
+  </ion-item>
+
+  <ion-item marigin-left="1px" marigin-right="1px" color="light" no-lines>
+    <button ion-button block round color="danger" large strong icon-start>
+      <ion-icon name="add"></ion-icon>
+      Create a new trip
+    </button>
+  </ion-item>
+
+  <ion-card *ngFor="let trip of tripList" background-color="light" (click)="navToTrip()">
+
+    <ion-item>
+      <div class="trip-name">{{trip.name}}</div>
+      <div class="trip-description">{{trip.description}}</div>
+    </ion-item>
+
+    <ion-item>
+      <div class="trip-user" item-start>{{userName}}</div>
+      <div class="trip-date">created on {{trip.createdDate}}</div>
+      <button ion-button outline small color="primary" item-end>
+        Edit
+      </button>
+    </ion-item>
+
+  </ion-card>
+
 </ion-content>
