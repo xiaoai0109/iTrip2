@@ -7,10 +7,46 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Story</ion-title>
+    <ion-buttons end>
+      <button ion-button block color="primary" (click)="change()">
+        change</button>
+    </ion-buttons>
   </ion-navbar>
+
 </ion-header>
 
+<ion-content padding (click)="change()" >
+  <div #map id="map"></div>
 
-<ion-content padding>
+  <ion-item class="pin-detail" *ngIf="isShow" (click)="change()" no-lines>
+    <h2>pin name</h2>
+    <p>pin location</p>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-2 class="col" *ngFor="let photo of photos">
+          <img src="{{photo}}">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+
+  <ion-item class="story-detail" no-lines>
+    <h2>story name</h2>
+    <p>10 pins 8 photos</p>
+  </ion-item>
+
+  <ion-footer class="footer">
+    <div style="text-align: center;">
+      <ion-buttons>
+        <button ion-button icon-start color="danger">
+          <ion-icon name="pause"></ion-icon>
+          End</button>
+        <button ion-button icon-start>
+          <ion-icon name="camera"></ion-icon>
+          Photo</button>
+      </ion-buttons>
+    </div>
+  </ion-footer>
+
 
 </ion-content>

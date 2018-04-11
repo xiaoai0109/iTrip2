@@ -1,7 +1,7 @@
 export interface Media {
     key?: string;
     name?: string;
-    address: string;
+    location: string;
     createdDate: string;
-    fileUrl?: string;
+    fileUrl: string;
 }

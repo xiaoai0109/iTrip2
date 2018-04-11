@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, PopoverController, Slides } from 'ionic-angular';
 import { Trip } from '../../models/trip';
 import { Story } from '../../models/story';
 import { Media } from '../../models/media';
+import { StoryPage } from '../../pages/story/story';
+import { PopoverComponent } from '../../components/popover/popover';
 
 /**
  * Generated class for the TripPage page.
@@ -19,7 +21,9 @@ import { Media } from '../../models/media';
   templateUrl: 'trip.html',
 })
 export class TripPage {
-
+  @ViewChild(Slides) slides: Slides;
+  
+  // static data below
   selectedSegment: string = "stories";
 
   userName: string = "Peiyan";
@@ -53,33 +57,71 @@ export class TripPage {
   mediaList: Media[] = [
     {
       name: '',
-      address: 'Universal Studio Singapore, Sentosa',
+      location: 'Universal Studio Singapore, Sentosa',
       createdDate:'Apr 09, 2018',
-      fileUrl: ''
+      fileUrl: 'assets/imgs/photo-l.JPG'
     },
     {
       name: 'Roller Roaster',
-      address: 'Universal Studio Singapore, Sentosa',
+      location: 'Universal Studio Singapore, Sentosa',
       createdDate:'Apr 09, 2018',
-      fileUrl: ''
+      fileUrl: 'assets/imgs/photo-p.JPG'
     },
     {
       name: 'Haunted House',
-      address: 'Haunted House, USS, Sentosa',
+      location: 'Haunted House, USS, Sentosa',
       createdDate:'Apr 09, 2018',
-      fileUrl: ''
+      fileUrl: 'assets/imgs/photo-p.JPG'
+    },
+    {
+      name: 'Haunted House',
+      location: 'Haunted House, USS, Sentosa',
+      createdDate:'Apr 09, 2018',
+      fileUrl: 'assets/imgs/photo-p.JPG'
+    },
+    {
+      name: 'Haunted House',
+      location: 'Haunted House, USS, Sentosa',
+      createdDate:'Apr 09, 2018',
+      fileUrl: 'assets/imgs/photo-l.JPG'
     }
   ]
+  // static data above
+
+  isMask: boolean = false;
+  slideIndex;
     
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController) {
   }
 
   navToStory() {
     this.navCtrl.push("page-story");
   }
-  
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad TripPage');
+  }
+
+  showSlides(index) {
+    this.isMask = true;
+    this.slideIndex = index;
+    // console.log('index of photos', index);
+  }
+
+  closeSlides() {
+    this.isMask = false;
+  }
+
+  slideChanged() {
+    let currentIndex = this.slides.getActiveIndex();
+    // console.log('Current index is', currentIndex);
+  }
+
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(PopoverComponent);
+    popover.present({
+      ev: myEvent
+    });
   }
 
 }

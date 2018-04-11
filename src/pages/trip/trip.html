@@ -7,16 +7,37 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Trip</ion-title>
+
+    <ion-buttons end>
+      <button ion-button clear icon-only color="Dark" (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-item no-lines>
+  <!-- Slides for Media -->
+  <ion-slides pager *ngIf="isMask" (ionSlideDidChange)="slideChanged()" initialSlide="{{slideIndex}}" loop="true">
+    <ion-slide *ngFor="let media of mediaList" (click)="closeSlides()">
+      <img [src]="media.fileUrl" />
+      <h2 *ngIf="media.name">{{media.name}}</h2>
+      <p>Location: {{media.location}}</p>
+    </ion-slide>
+  </ion-slides>
+
+  <!-- Trip Info -->
+  <ion-item no-lines *ngIf="!isMask">
     <div class="trip-name">{{trip.name}}</div>
     <div class="date">{{trip.createdDate}} - {{storyList[0].createdDate}}</div>
+    <button item-end ion-button icon-start color="secondary">
+      <ion-icon name="play"></ion-icon>
+      Start</button>
   </ion-item>
 
-  <ion-segment [(ngModel)]="selectedSegment" padding-left="1px" padding-right="1px">
+  <!-- Segment setting for stories and photos -->
+  <ion-segment [(ngModel)]="selectedSegment" padding-left="1px" padding-right="1px" *ngIf="!isMask">
     <ion-segment-button value="stories">
       Stories ({{storyCount}})
     </ion-segment-button>
@@ -25,8 +46,9 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div [ngSwitch]="selectedSegment" class="content-background">
-
+  <!-- Default Segment -->
+  <div [ngSwitch]="selectedSegment" class="content-background" *ngIf="!isMask">
+    <!-- Segment: stories -->
     <div *ngSwitchCase="'stories'">
 
       <ion-card *ngFor="let story of storyList" background-color="light" (click)="navToStory()">
@@ -42,10 +64,11 @@
 
     </div>
 
+    <!-- Segment: photos (Grid View) s-->
     <div *ngSwitchCase="'photos'">
 
-      <ion-card *ngFor="let media of mediaList" background-color="light">
-        
+      <!-- <ion-card *ngFor="let media of mediaList" background-color="light" (click)="presentPopover($event)">
+
         <img src="assets/imgs/map-example.png">
         <ion-item *ngIf="media.name" class="media-name">{{media.name}}</ion-item>
         <ion-item class="info">Address: {{media.address}}</ion-item>
@@ -54,7 +77,16 @@
           <button ion-button clear small item-end>Edit</button>
         </ion-item>
 
-      </ion-card>
+      </ion-card> -->
+
+      <ion-grid>
+        <ion-row>
+          <ion-col col-4 *ngFor="let media of mediaList; let i = index" (click)="showSlides(i)">
+            <img [src]="media.fileUrl">
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
     </div>
 
   </div>

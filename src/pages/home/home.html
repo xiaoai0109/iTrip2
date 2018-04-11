@@ -15,14 +15,14 @@
     <div class="user-name">{{userName}}</div>
   </ion-item>
 
-  <ion-item marigin-left="1px" marigin-right="1px" color="light" no-lines>
+  <ion-item marigin-left="1px" marigin-right="1px" no-lines>
     <button ion-button block round color="danger" large strong icon-start>
       <ion-icon name="add"></ion-icon>
       Create a new trip
     </button>
   </ion-item>
 
-  <ion-card *ngFor="let trip of tripList" background-color="light" (click)="navToTrip()">
+  <ion-card *ngFor="let trip of tripList" (click)="navToTrip()">
 
     <ion-item>
       <div class="trip-name">{{trip.name}}</div>
