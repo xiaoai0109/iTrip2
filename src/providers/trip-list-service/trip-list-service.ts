@@ -2,25 +2,32 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Trip } from '../../models/trip';
+import { NavParams } from 'ionic-angular';
 
-/*
-  Generated class for the TripListServiceProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class TripListServiceProvider {
-  private tripListRef = this.db.list<Trip>('trip-list');
+  private tripListRef;
 
   constructor(public http: HttpClient, private db : AngularFireDatabase) {
     console.log('Hello TripListServiceProvider Provider');
+    // need to pass uid to constructor
+    let uid = '111';
+    this.tripListRef = this.db.list<Trip>('/user-trips/' + uid);
+  }
+
+  getTripList() {
+    return this.tripListRef;
   }
 
   addTrip(trip : Trip) {
-    // user-trips also need to push
     return this.tripListRef.push(trip);
   }
 
+  updateTrip(trip : Trip) {
+    return this.tripListRef.update(trip.key, trip);
+  }
 
+  removeTrip(trip : Trip) {
+    return this.tripListRef.remove(trip.key);
+  }
 }

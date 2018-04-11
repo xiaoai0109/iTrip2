@@ -6,14 +6,6 @@ import { DatePipe } from '@angular/common';
 import { TripListServiceProvider } from '../../providers/trip-list-service/trip-list-service';
 import { HomePage } from '../home/home';
 
-
-/**
- * Generated class for the AddTripPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage({
   name: 'page-add-trip'
 })
@@ -22,16 +14,19 @@ import { HomePage } from '../home/home';
   templateUrl: 'add-trip.html',
 })
 export class AddTripPage {
+  uid: string = '111';
+
   trip : Trip = {
     name: '',
     description: '',
     createdDate: ''
   };
+
   constructor(public navCtrl: NavController, public navParams: NavParams, 
     public datepipe: DatePipe, private tripListService: TripListServiceProvider) {
   }
 
-  addTrip(trip: Trip) {
+  addTrip(trip: Trip, uid: string) {
     trip.createdDate = this.datepipe.transform(new Date(), 'mediumDate');
     this.tripListService.addTrip(trip).then(
       ref => {
@@ -39,7 +34,6 @@ export class AddTripPage {
       }
     ) 
     console.log(trip.createdDate);
-
   }
 
   ionViewDidLoad() {

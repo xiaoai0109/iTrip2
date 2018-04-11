@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Edit Story</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item>
+    <ion-label stacked>Name</ion-label>
+    <ion-input [(ngModel)]="story.name" placeholder="e.g. A sunny day"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label stacked>Description</ion-label>
+    <ion-textarea [(ngModel)]="story.description" placeholder="e.g. I like the sunshine!"></ion-textarea>
+  </ion-item>
+  <button ion-button block clear (click)="updateStory(story)">Save</button>
+  <button ion-button block clear color="danger" (click)="removerStory(story)">Delete</button>
+</ion-content>

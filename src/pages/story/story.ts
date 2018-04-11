@@ -1,16 +1,11 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, PopoverController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Device } from '@ionic-native/device';
 import * as firebase from 'firebase';
-
-
-/**
- * Generated class for the StoryPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Story } from '../../models/story';
+import { DatePipe } from '@angular/common';
+import { StoryListServiceProvider } from '../../providers/story-list-service/story-list-service';
 
 declare var google;
 
@@ -29,19 +24,30 @@ export class StoryPage {
 
   isShow: boolean = false;
 
-  // static photos
-  photos: string[] = ["assets/imgs/logo.png", 
-  "assets/imgs/logo.png", "assets/imgs/logo.png", "assets/imgs/logo.png"];
+  // static data below
+  photos: string[] = ["assets/imgs/logo.png",
+    "assets/imgs/logo.png", "assets/imgs/logo.png", "assets/imgs/logo.png"];
+  // static data above
 
-  // declare an array variable for holds markers
+  story: Story = {
+    name: '',
+    description: '',
+    createdDate: ''
+  };
+
   markers = [];
-
-  // reference to firebase database to store updated geolocation information
   ref = firebase.database().ref('geos/');
 
   // Inject Ionic Platform and required framework to the constructor
-  constructor(public navCtrl: NavController, public platform: Platform,
-    private geolocation: Geolocation, private device: Device, public popoverCtrl: PopoverController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public datepipe: DatePipe,
+    private storyListService: StoryListServiceProvider, public platform: Platform, private geolocation: Geolocation, private device: Device) {
+    // get story.name according to flag 'isStart' 
+    let isStart = this.navParams.get('isStart');
+    if (isStart) {
+      this.presentPrompt();
+    } else {
+      this.story = this.navParams.get('story');
+    }
 
     platform.ready().then(() => {
       this.initMap();
@@ -49,7 +55,6 @@ export class StoryPage {
 
   }
 
-  // Create this function to init or load the Google Maps
   initMap() {
     var image = 'assets/imgs/marker-example.svg';
 
@@ -99,18 +104,15 @@ export class StoryPage {
     }
   }
 
-  // function for update/add Geolocation data on Firebase database
   updateGeolocation(uuid, lat, lng) {
     if (localStorage.getItem('myKey')) {
       firebase.database().ref('geos/' + localStorage.getItem('myKey')).set({
-        uuid: uuid,
         latitude: lat,
         longitude: lng,
       });
     } else {
       var newData = this.ref.push();
       newData.set({
-        uuid: uuid,
         latitude: lat,
         longitude: lng,
       });
@@ -136,10 +138,29 @@ export class StoryPage {
   //   });
   // }
 
+  // a PromptAlert to add story 
+  presentPrompt() {
+    let alert = this.alertCtrl.create({
+      title: 'Start your Story',
+      subTitle: 'Give it an awesome name!',
+      inputs: [{ name: 'name', placeholder: 'e.g. A sunny day'}],
+      buttons: [{ text: 'Cancel', role: 'cancel'},
+        { text: 'Start',
+          handler: data => {
+            if (data.name !== '') {
+              this.story.name = data.name;
+              this.story.createdDate = this.datepipe.transform(new Date(), 'mediumDate');
+              // add story
+              this.storyListService.addStory(this.story);
+              console.log('story.name')
+            } else {
+              return false;
+            }}}]});
+    alert.present();
+  }
 }
 
-// Get the list of other device position
-// 1. Create this function below the closing of the Class to convert Firebase object to an array
+// Get the list of other position
 export const snapshotToArray = snapshot => {
   var returnArr = [];
   snapshot.forEach(childSnapshot => {

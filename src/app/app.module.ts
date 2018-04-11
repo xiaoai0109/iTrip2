@@ -14,17 +14,17 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
-import { PopoverComponent } from '../components/popover/popover';
+
 import { DatePipe } from '@angular/common';
 import { TripListServiceProvider } from '../providers/trip-list-service/trip-list-service';
 import { HttpClientModule } from '@angular/common/http';
+import { StoryListServiceProvider } from '../providers/story-list-service/story-list-service';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    LoginPage,
-    PopoverComponent
+    LoginPage
   ],
   imports: [
     BrowserModule,
@@ -38,8 +38,7 @@ import { HttpClientModule } from '@angular/common/http';
   entryComponents: [
     MyApp,
     HomePage,
-    LoginPage,
-    PopoverComponent
+    LoginPage
   ],
   providers: [
     StatusBar,
@@ -49,6 +48,7 @@ import { HttpClientModule } from '@angular/common/http';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DatePipe,
     TripListServiceProvider,
+    StoryListServiceProvider,
     
   ]
 })

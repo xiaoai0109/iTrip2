@@ -4,14 +4,8 @@ import { Trip } from '../../models/trip';
 import { Story } from '../../models/story';
 import { Media } from '../../models/media';
 import { StoryPage } from '../../pages/story/story';
-import { PopoverComponent } from '../../components/popover/popover';
-
-/**
- * Generated class for the TripPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Observable } from 'rxjs/Observable';
+import { StoryListServiceProvider } from '../../providers/story-list-service/story-list-service';
 
 @IonicPage({
   name: 'page-trip'
@@ -23,36 +17,33 @@ import { PopoverComponent } from '../../components/popover/popover';
 export class TripPage {
   @ViewChild(Slides) slides: Slides;
   
-  // static data below
   selectedSegment: string = "stories";
 
-  userName: string = "Peiyan";
-
   trip: Trip = {
-      name: 'Activities in Singapore',
-      description: 'I am going here from April 5th',
-      createdDate: 'Apr 05, 2018'
+      name: '', //'Activities in Singapore',
+      description: '', //'I am going here from April 5th',
+      createdDate: '' //'Apr 05, 2018'
   }
 
+  storyList : Observable<Story[]>;
+
+  // static data below
+  userName: string = "Peiyan";
   storyCount: number = 2;
   photoCount: number = 15;
 
-  storyList: Story[] = [
-    {
-      name: 'USS 1 day',
-      description: 'USS!',
-      createdDate: 'Apr 09, 2018',
-      pinCount: 2,
-      photoCount: 15
-    },
-    {
-      name: 'Marina Bay Sands',
-      // description: 'It is very beautiful',
-      createdDate: 'Apr 06, 2018',
-      pinCount: 5,
-      photoCount: 20
-    }
-  ]
+  // storyList: Story[] = [
+  //   {
+  //     name: 'USS 1 day',
+  //     description: 'USS!',
+  //     createdDate: 'Apr 09, 2018',
+  //   },
+  //   {
+  //     name: 'Marina Bay Sands',
+  //     // description: 'It is very beautiful',
+  //     createdDate: 'Apr 06, 2018',
+  //   }
+  // ]
 
   mediaList: Media[] = [
     {
@@ -91,11 +82,30 @@ export class TripPage {
   isMask: boolean = false;
   slideIndex;
     
-  constructor(public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storyListService: StoryListServiceProvider) {
+    this.trip = this.navParams.get('trip');
+    this.storyList = this.storyListService.getStoryList()
+    .snapshotChanges()
+    .map(
+      changes => {
+        return changes.map ( c=> ({
+          key: c.payload.key, ...c.payload.val()
+        }))
+      }
+    )
   }
 
-  navToStory() {
-    this.navCtrl.push("page-story");
+  navToStory(story: Story) {
+    this.navCtrl.push("page-story", { isStart : false, story : story });
+  }
+
+  startStory() {
+    console.log("start story");
+    this.navCtrl.push("page-story", { isStart : true});
+  }
+
+  editStory(story: Story) {
+    this.navCtrl.push('page-edit-story', { story : story });
   }
 
   ionViewDidLoad() {
@@ -105,7 +115,6 @@ export class TripPage {
   showSlides(index) {
     this.isMask = true;
     this.slideIndex = index;
-    // console.log('index of photos', index);
   }
 
   closeSlides() {
@@ -114,14 +123,13 @@ export class TripPage {
 
   slideChanged() {
     let currentIndex = this.slides.getActiveIndex();
-    // console.log('Current index is', currentIndex);
   }
 
-  presentPopover(myEvent) {
-    let popover = this.popoverCtrl.create(PopoverComponent);
-    popover.present({
-      ev: myEvent
-    });
-  }
+  // presentPopover(myEvent) {
+  //   let popover = this.popoverCtrl.create(PopoverComponent);
+  //   popover.present({
+  //     ev: myEvent
+  //   });
+  // }
 
 }

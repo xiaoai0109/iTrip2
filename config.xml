@@ -86,6 +86,6 @@
     </plugin>
     <plugin name="cordova-plugin-device" spec="^2.0.1" />
     <allow-navigation href="http://192.168.0.115:8101" />
-    <engine name="ios" spec="4.5.4" />
     <allow-navigation href="http://192.168.0.115:8100" />
+    <engine name="ios" spec="4.5.4" />
 </widget>

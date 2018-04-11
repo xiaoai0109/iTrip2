@@ -8,7 +8,7 @@
 
 <ion-content class="content-background">
 
-  <ion-item>
+  <ion-item no-lines>
     <ion-avatar item-start>
       <img src="assets/imgs/avater-example.png">
     </ion-avatar>
@@ -22,9 +22,9 @@
     </button>
   </ion-item>
 
-  <ion-card *ngFor="let trip of tripList" (click)="navToTrip()">
+  <ion-card *ngFor="let trip of tripList | async" >
 
-    <ion-item>
+    <ion-item (click)="navToTrip(trip)">
       <div class="trip-name">{{trip.name}}</div>
       <div class="trip-description">{{trip.description}}</div>
     </ion-item>
@@ -32,7 +32,7 @@
     <ion-item>
       <div class="trip-user" item-start>{{userName}}</div>
       <div class="trip-date">created on {{trip.createdDate}}</div>
-      <button ion-button outline small color="primary" item-end>
+      <button ion-button outline small color="primary" item-end z-index="1" (click)="editTrip(trip)">
         Edit
       </button>
     </ion-item>
