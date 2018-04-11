@@ -15,6 +15,9 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { PopoverComponent } from '../components/popover/popover';
+import { DatePipe } from '@angular/common';
+import { TripListServiceProvider } from '../providers/trip-list-service/trip-list-service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,7 @@ import { PopoverComponent } from '../components/popover/popover';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireDatabaseModule,
@@ -42,7 +46,10 @@ import { PopoverComponent } from '../components/popover/popover';
     SplashScreen,
     Geolocation,
     Device,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    DatePipe,
+    TripListServiceProvider,
+    
   ]
 })
 export class AppModule {}

@@ -36,4 +36,8 @@ export class HomePage {
     this.navCtrl.push("page-trip");
   }
 
+  addTrip() {
+    this.navCtrl.push("page-add-trip");
+  }
+
 }
