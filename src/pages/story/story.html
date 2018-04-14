@@ -6,41 +6,31 @@
         change</button>
     </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
-<ion-content padding (click)="change()" >
+<ion-content (click)="change()" scroll="false">
   <div #map id="map"></div>
 
-  <ion-item class="stay-detail" *ngIf="isShow" (click)="change()" no-lines>
-    <h2>stay name</h2>
-    <p>stay location</p>
-    <ion-grid>
-      <ion-row>
-        <ion-col col-2 class="col" *ngFor="let photo of photos">
-          <img src="{{photo}}">
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+  <!-- for stay info -->
+  <ion-item class="stay-detail" *ngIf="isShow" (click)="change()">
+    <h2 class="stay-name">Roller</h2>
+    <p class="info">Universial Studio Singapore</p>
+    <ion-row class="row-center" nowrap>
+      <ion-col col-2 class="col" *ngFor="let photo of photos">
+        <img src="{{photo}}">
+      </ion-col>
+    </ion-row>
   </ion-item>
 
-  <ion-item class="story-detail" no-lines>
-    <h2>{{story.name}}</h2>
-    <p>10 stays 8 photos</p>
-  </ion-item>
-
+  <!-- footer for story info -->
   <ion-footer class="footer">
-    <div style="text-align: center;">
-      <ion-buttons>
-        <button ion-button icon-start color="danger">
-          <ion-icon name="pause"></ion-icon>
-          End</button>
-        <button ion-button icon-start>
-          <ion-icon name="camera"></ion-icon>
-          Photo</button>
-      </ion-buttons>
-    </div>
+    <ion-item no-lines>
+      <p class="story-name">{{story.name}}</p>
+      <p class="info">{{stayCount}} stays {{mediaCount}} photos</p>
+      <button ion-button icon-only large item-end>
+        <ion-icon name="camera"></ion-icon>
+      </button>
+    </ion-item>
   </ion-footer>
-
 
 </ion-content>

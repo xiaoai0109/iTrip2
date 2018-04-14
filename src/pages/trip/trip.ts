@@ -16,20 +16,20 @@ import { StoryListServiceProvider } from '../../providers/story-list-service/sto
 })
 export class TripPage {
   @ViewChild(Slides) slides: Slides;
-  
+
   selectedSegment: string = "stories";
 
   trip: Trip = {
-      name: '', 
-      description: '', 
-      createdDate: ''
+    name: '',
+    description: '',
+    createdDate: ''
   }
 
-  storyList : Observable<Story[]>;
+  storyList: Observable<Story[]>;
 
   // static data below
   userName: string = "Peiyan";
-  storyCount: number = 2;
+  storyCount: number = 0;
   photoCount: number = 15;
 
   // storyList: Story[] = [
@@ -49,31 +49,31 @@ export class TripPage {
     {
       name: '',
       location: 'Universal Studio Singapore, Sentosa',
-      createdDate:'Apr 09, 2018',
+      createdDate: 'Apr 09, 2018',
       fileUrl: 'assets/imgs/photo-l.JPG'
     },
     {
       name: 'Roller Roaster',
       location: 'Universal Studio Singapore, Sentosa',
-      createdDate:'Apr 09, 2018',
+      createdDate: 'Apr 09, 2018',
       fileUrl: 'assets/imgs/photo-l.JPG'
     },
     {
       name: 'Haunted House',
       location: 'Haunted House, USS, Sentosa',
-      createdDate:'Apr 09, 2018',
+      createdDate: 'Apr 09, 2018',
       fileUrl: 'assets/imgs/photo-p.JPG'
     },
     {
       name: 'Haunted House',
       location: 'Haunted House, USS, Sentosa',
-      createdDate:'Apr 09, 2018',
+      createdDate: 'Apr 09, 2018',
       fileUrl: 'assets/imgs/photo-p.JPG'
     },
     {
       name: 'Haunted House',
       location: 'Haunted House, USS, Sentosa',
-      createdDate:'Apr 09, 2018',
+      createdDate: 'Apr 09, 2018',
       fileUrl: 'assets/imgs/photo-l.JPG'
     }
   ]
@@ -81,30 +81,37 @@ export class TripPage {
 
   isMask: boolean = false;
   slideIndex;
-    
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private storyListService: StoryListServiceProvider) {
     this.trip = this.navParams.get('trip');
+
     this.storyList = this.storyListService.getStoryList(this.trip.key)
-    .snapshotChanges()
-    .map(
-      changes => {
-        return changes.map ( c=> ({
-          key: c.payload.key, ...c.payload.val()
-        }))
-      }
-    )
+      .snapshotChanges()
+      .map(
+        changes => {
+          return changes.map(c => ({
+            key: c.payload.key, ...c.payload.val()
+          }))
+        });
+
+    this.storyListService.getStoryList(this.trip.key)
+      .snapshotChanges()
+      .subscribe(keys => {
+        this.storyCount = 0;
+        keys.forEach(key => this.storyCount = this.storyCount + 1)
+      });
   }
 
   navToStory(story: Story) {
-    this.navCtrl.push("page-story", { isStart : false, story : story, tripId : this.trip.key });
+    this.navCtrl.push("page-story", { isStart: false, story: story, tripId: this.trip.key });
   }
 
   startStory() {
-    this.navCtrl.push("page-story", { isStart : true, tripId : this.trip.key});
+    this.navCtrl.push("page-story", { isStart: true, tripId: this.trip.key });
   }
 
   editStory(story: Story) {
-    this.navCtrl.push('page-edit-story', { story : story, tripId : this.trip.key });
+    this.navCtrl.push('page-edit-story', { story: story, tripId: this.trip.key });
   }
 
   showSlides(index) {

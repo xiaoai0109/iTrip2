@@ -12,7 +12,7 @@ import { HomePage } from '../home/home';
   templateUrl: 'edit-trip.html',
 })
 export class EditTripPage {
-  uid : string = "111";
+  uid : string = '';
 
   trip : Trip = {
     name: '',
@@ -22,6 +22,7 @@ export class EditTripPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
     private tripListService: TripListServiceProvider) {
+    this.uid = this.navParams.get('uid');
     this.trip = this.navParams.get('trip');
   }
 

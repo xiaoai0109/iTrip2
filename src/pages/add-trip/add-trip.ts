@@ -14,7 +14,7 @@ import { HomePage } from '../home/home';
   templateUrl: 'add-trip.html',
 })
 export class AddTripPage {
-  uid: string = '111';
+  uid: string = '';
 
   trip : Trip = {
     name: '',
@@ -24,6 +24,7 @@ export class AddTripPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, 
     public datepipe: DatePipe, private tripListService: TripListServiceProvider) {
+    this.uid = this.navParams.get('uid');
   }
 
   addTrip(trip: Trip) {

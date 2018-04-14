@@ -25,8 +25,11 @@ export class StoryPage {
   isShow: boolean = false;
 
   // static data below
-  photos: string[] = ["assets/imgs/logo.png",
-    "assets/imgs/logo.png", "assets/imgs/logo.png", "assets/imgs/logo.png"];
+  photos: string[] = ["assets/imgs/photo-l.JPG",
+    "assets/imgs/logo.png", "assets/imgs/photo-l.JPG", "assets/imgs/photo-p.JPG", "assets/imgs/logo.png",
+    "assets/imgs/logo.png", "assets/imgs/photo-l.JPG", "assets/imgs/photo-p.JPG", "assets/imgs/logo.png"];
+  stayCount: number = 11;
+  mediaCount: number = 15;
   // static data above
 
   tripId: string = '';
@@ -49,7 +52,8 @@ export class StoryPage {
     if (isStart) {
       this.presentPrompt();
     } else {
-      this.story = this.navParams.get('story');
+      // this.story = this.navParams.get('story');
+      this.story.name = 'Test';
     }
 
     platform.ready().then(() => {
@@ -77,7 +81,7 @@ export class StoryPage {
       this.deleteMarkers();
       this.updateGeolocation(this.device.uuid, data.coords.latitude, data.coords.longitude);
       var updateLocation = new google.maps.LatLng(data.coords.latitude, data.coords.longitude);
-      // var image = 'assets/imgs/marker.png';
+      // var image = 'assets/imgs/marker.JPG';
       this.addMarker(updateLocation, image);
       this.setMapOnAll(this.map);
     });
@@ -158,8 +162,17 @@ export class StoryPage {
               console.log('story.name')
             } else {
               return false;
-            }}}]});
+            }}}]
+          });
+
     alert.present();
+    
+    // alert.present().then(() => {
+    //   const firstInput: any = document.querySelector('ion-alert input');
+    //   console.log("firstinput", firstInput);
+    //   firstInput.focus();
+    //   return;
+    // });
   }
 }
 

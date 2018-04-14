@@ -10,9 +10,9 @@
 
   <ion-item no-lines>
     <ion-avatar item-start>
-      <img src="assets/imgs/avater-example.png">
+      <img [src]="user.avater">
     </ion-avatar>
-    <div class="user-name">{{userName}}</div>
+    <div class="user-name">{{user.name}}</div>
   </ion-item>
 
   <ion-item marigin-left="1px" marigin-right="1px" no-lines>
@@ -30,7 +30,7 @@
     </ion-item>
 
     <ion-item>
-      <div class="trip-user" item-start>{{userName}}</div>
+      <div class="trip-user" item-start>{{user.name}}</div>
       <div class="trip-date">created on {{trip.createdDate}}</div>
       <button ion-button outline small color="primary" item-end z-index="1" (click)="editTrip(trip)">
         Edit

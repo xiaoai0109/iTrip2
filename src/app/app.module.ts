@@ -7,6 +7,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Device } from '@ionic-native/device';
 
 import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { FIREBASE_CONFIG } from './firebase.credentials';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireStorageModule } from 'angularfire2/storage';
@@ -19,6 +20,8 @@ import { DatePipe } from '@angular/common';
 import { TripListServiceProvider } from '../providers/trip-list-service/trip-list-service';
 import { HttpClientModule } from '@angular/common/http';
 import { StoryListServiceProvider } from '../providers/story-list-service/story-list-service';
+import { AuthService } from '../services/auth.service';
+import { UserServiceProvider } from '../providers/user-service/user-service';
 
 @NgModule({
   declarations: [
@@ -49,7 +52,9 @@ import { StoryListServiceProvider } from '../providers/story-list-service/story-
     DatePipe,
     TripListServiceProvider,
     StoryListServiceProvider,
-    
+    AngularFireAuth,
+		AuthService,
+    UserServiceProvider
   ]
 })
 export class AppModule {}
