@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Story } from '../../models/story';
 import { StoryListServiceProvider } from '../../providers/story-list-service/story-list-service';
 import { HomePage } from '../home/home';
@@ -12,6 +12,7 @@ import { HomePage } from '../home/home';
   templateUrl: 'edit-story.html',
 })
 export class EditStoryPage {
+  tripId : string;
 
   story: Story = {
     name: '',
@@ -19,7 +20,9 @@ export class EditStoryPage {
     createdDate: ''
   };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storyListService: StoryListServiceProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
+    private storyListService: StoryListServiceProvider) {
+    this.tripId = this.navParams.get('tripId');
     this.story = this.navParams.get('story');
   }
 
@@ -28,15 +31,32 @@ export class EditStoryPage {
   }
 
   updateStory(story: Story) {
-    this.storyListService.updateStory(story).then(() => {
+    this.storyListService.updateStory(story, this.tripId).then(() => {
       this.navCtrl.pop();
     })
   }
 
-  removeTrip(story: Story) {
-    this.storyListService.removeStory(story).then(() => {
+  removeStory(story: Story) {
+    this.storyListService.removeStory(story, this.tripId).then(() => {
       this.navCtrl.pop();
     })
+  }
+
+  showDeleteConfirm(story: Story) {
+    let confirm = this.alertCtrl.create({
+      title: 'Are you sure?',
+      message: 'All the memories in this story will be deleted permanently',
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => {
+          }},
+        {
+          text: 'Yes',
+          handler: () => {
+            this.removeStory(story);
+          }}]});
+    confirm.present();
   }
 
 }

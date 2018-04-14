@@ -11,23 +11,28 @@ export class StoryListServiceProvider {
   constructor(public http: HttpClient, private db : AngularFireDatabase) {
     console.log('Hello StoryListServiceProvider Provider');
         // need to pass tripId to constructor
-        let tripId = 'ttt';
-        this.storyListRef = this.db.list<Story>('/stories/' + tripId);
+        // let tripId = 'ttt';
+        // this.storyListRef = this.db.list<Story>('/stories/' + tripId);
   }
 
-  getStoryList() {
+  getStoryList(tripId : string) {
+    this.storyListRef = this.db.list<Story>('/stories/' + tripId);
     return this.storyListRef;
   }
 
-  addStory(story : Story) {
+  addStory(story : Story, tripId : string) {
+    this.storyListRef = this.db.list<Story>('/stories/' + tripId);
     return this.storyListRef.push(story);
   }
 
-  updateStory(story : Story) {
+  updateStory(story : Story, tripId : string) {
+    this.storyListRef = this.db.list<Story>('/stories/' + tripId);
     return this.storyListRef.update(story.key, story);
   }
 
-  removeStory(story : Story) {
+  removeStory(story : Story, tripId : string) {
+    this.storyListRef = this.db.list<Story>('/stories/' + tripId);
+    // also need to remove the stays and media
     return this.storyListRef.remove(story.key);
   }
 

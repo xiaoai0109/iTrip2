@@ -26,9 +26,9 @@ export class AddTripPage {
     public datepipe: DatePipe, private tripListService: TripListServiceProvider) {
   }
 
-  addTrip(trip: Trip, uid: string) {
+  addTrip(trip: Trip) {
     trip.createdDate = this.datepipe.transform(new Date(), 'mediumDate');
-    this.tripListService.addTrip(trip).then(
+    this.tripListService.addTrip(trip, this.uid).then(
       ref => {
         this.navCtrl.setRoot(HomePage);
       }

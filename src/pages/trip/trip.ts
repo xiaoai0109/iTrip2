@@ -20,9 +20,9 @@ export class TripPage {
   selectedSegment: string = "stories";
 
   trip: Trip = {
-      name: '', //'Activities in Singapore',
-      description: '', //'I am going here from April 5th',
-      createdDate: '' //'Apr 05, 2018'
+      name: '', 
+      description: '', 
+      createdDate: ''
   }
 
   storyList : Observable<Story[]>;
@@ -56,7 +56,7 @@ export class TripPage {
       name: 'Roller Roaster',
       location: 'Universal Studio Singapore, Sentosa',
       createdDate:'Apr 09, 2018',
-      fileUrl: 'assets/imgs/photo-p.JPG'
+      fileUrl: 'assets/imgs/photo-l.JPG'
     },
     {
       name: 'Haunted House',
@@ -84,7 +84,7 @@ export class TripPage {
     
   constructor(public navCtrl: NavController, public navParams: NavParams, private storyListService: StoryListServiceProvider) {
     this.trip = this.navParams.get('trip');
-    this.storyList = this.storyListService.getStoryList()
+    this.storyList = this.storyListService.getStoryList(this.trip.key)
     .snapshotChanges()
     .map(
       changes => {
@@ -96,20 +96,15 @@ export class TripPage {
   }
 
   navToStory(story: Story) {
-    this.navCtrl.push("page-story", { isStart : false, story : story });
+    this.navCtrl.push("page-story", { isStart : false, story : story, tripId : this.trip.key });
   }
 
   startStory() {
-    console.log("start story");
-    this.navCtrl.push("page-story", { isStart : true});
+    this.navCtrl.push("page-story", { isStart : true, tripId : this.trip.key});
   }
 
   editStory(story: Story) {
-    this.navCtrl.push('page-edit-story', { story : story });
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad TripPage');
+    this.navCtrl.push('page-edit-story', { story : story, tripId : this.trip.key });
   }
 
   showSlides(index) {
@@ -123,6 +118,10 @@ export class TripPage {
 
   slideChanged() {
     let currentIndex = this.slides.getActiveIndex();
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad TripPage');
   }
 
   // presentPopover(myEvent) {

@@ -26,7 +26,7 @@
 
     <ion-item (click)="navToTrip(trip)">
       <div class="trip-name">{{trip.name}}</div>
-      <div class="trip-description">{{trip.description}}</div>
+      <div *ngIf="trip.description !== ''" class="trip-description">{{trip.description}}</div>
     </ion-item>
 
     <ion-item>

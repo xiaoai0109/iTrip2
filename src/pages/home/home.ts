@@ -16,6 +16,7 @@ export class HomePage {
 
   // static data below
   userName: string = "Peiyan";
+  uid: string = "111";
 
   // tripList: Trip[] = [
   //   {
@@ -32,7 +33,7 @@ export class HomePage {
   // static data above
   
   constructor(public navCtrl: NavController, public db: AngularFireDatabase, private tripListService: TripListServiceProvider) {
-    this.tripList = this.tripListService.getTripList()
+    this.tripList = this.tripListService.getTripList(this.uid)
     .snapshotChanges()
     .map(
       changes => {
@@ -52,7 +53,6 @@ export class HomePage {
   }
 
   editTrip(trip: Trip) {
-    console.log("trip", trip);
     this.navCtrl.push('page-edit-trip', { trip : trip });
   }
 }

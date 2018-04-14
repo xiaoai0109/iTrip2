@@ -59,7 +59,7 @@
     <!-- Segment: photos (Grid View) s-->
     <div *ngSwitchCase="'photos'">
       <ion-grid>
-        <ion-row>
+        <ion-row class="row-center">
           <ion-col col-4 *ngFor="let media of mediaList; let i = index" (click)="showSlides(i)">
             <img [src]="media.fileUrl">
           </ion-col>
@@ -69,3 +69,6 @@
   </div>
 
 </ion-content>
+
+
+<!-- style="overflow: hidden; height: 90px"  -->

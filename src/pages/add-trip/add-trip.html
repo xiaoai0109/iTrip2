@@ -1,18 +1,22 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Trip</ion-title>
+    <ion-buttons end>
+      <button ion-button strong color="danger" (click)="addTrip(trip)" [disabled]="trip.name == ''">Create</button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
   <ion-item>
-    <ion-label stacked>Name</ion-label>
-    <ion-input [(ngModel)]="trip.name" placeholder="e.g. My Wonderful Trip"></ion-input>
+    <ion-label stacked class="label">Name</ion-label>
+    <ion-input type="text" [(ngModel)]="trip.name" placeholder="e.g. My Wonderful Trip"></ion-input>
   </ion-item>
-  <ion-item>
-    <ion-label stacked>Description</ion-label>
-    <ion-textarea [(ngModel)]="trip.description" placeholder="e.g. I am going to there for 3 days!"></ion-textarea>
+  <ion-item no-lines>
+    <ion-label stacked class="label">Description</ion-label>
+    <ion-textarea type="text" class="description" [(ngModel)]="trip.description" placeholder="e.g. I am going to there for 3 days!"></ion-textarea>
   </ion-item>
-  <button ion-button block clear (click)="addTrip(trip,uid)" [disabled]="trip.name === ''">Create</button>
 </ion-content>
+
+<!-- text-center padding -->

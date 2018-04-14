@@ -29,6 +29,8 @@ export class StoryPage {
     "assets/imgs/logo.png", "assets/imgs/logo.png", "assets/imgs/logo.png"];
   // static data above
 
+  tripId: string = '';
+
   story: Story = {
     name: '',
     description: '',
@@ -41,6 +43,7 @@ export class StoryPage {
   // Inject Ionic Platform and required framework to the constructor
   constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public datepipe: DatePipe,
     private storyListService: StoryListServiceProvider, public platform: Platform, private geolocation: Geolocation, private device: Device) {
+    this.tripId = this.navParams.get('tripId');
     // get story.name according to flag 'isStart' 
     let isStart = this.navParams.get('isStart');
     if (isStart) {
@@ -151,7 +154,7 @@ export class StoryPage {
               this.story.name = data.name;
               this.story.createdDate = this.datepipe.transform(new Date(), 'mediumDate');
               // add story
-              this.storyListService.addStory(this.story);
+              this.storyListService.addStory(this.story, this.tripId);
               console.log('story.name')
             } else {
               return false;

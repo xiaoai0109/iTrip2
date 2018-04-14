@@ -1,3 +1,12 @@
 page-edit-story {
-
+    .label {
+        font-size: 1.8rem !important; 
+        font-weight: bold;
+        color: red;
+    }
+    .description {
+        min-height: 200px;
+        border: lightgray solid 1px;
+      
+    }
 }
