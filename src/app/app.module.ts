@@ -22,12 +22,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoryListServiceProvider } from '../providers/story-list-service/story-list-service';
 import { AuthService } from '../services/auth.service';
 import { UserServiceProvider } from '../providers/user-service/user-service';
+import { PopoverComponent } from '../components/popover/popover';
+import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    LoginPage
+    LoginPage,
+    
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,8 @@ import { UserServiceProvider } from '../providers/user-service/user-service';
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireDatabaseModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

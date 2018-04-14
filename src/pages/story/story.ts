@@ -138,12 +138,6 @@ export class StoryPage {
       this.isShow = true;
     }
   }
-  // presentPopover(myEvent) {
-  //   let popover = this.popoverCtrl.create(PopoverComponent);
-  //   popover.present({
-  //     ev: myEvent
-  //   });
-  // }
 
   // a PromptAlert to add story 
   presentPrompt() {

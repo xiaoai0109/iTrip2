@@ -32,19 +32,6 @@ export class TripPage {
   storyCount: number = 0;
   photoCount: number = 15;
 
-  // storyList: Story[] = [
-  //   {
-  //     name: 'USS 1 day',
-  //     description: 'USS!',
-  //     createdDate: 'Apr 09, 2018',
-  //   },
-  //   {
-  //     name: 'Marina Bay Sands',
-  //     // description: 'It is very beautiful',
-  //     createdDate: 'Apr 06, 2018',
-  //   }
-  // ]
-
   mediaList: Media[] = [
     {
       name: '',
@@ -130,12 +117,5 @@ export class TripPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad TripPage');
   }
-
-  // presentPopover(myEvent) {
-  //   let popover = this.popoverCtrl.create(PopoverComponent);
-  //   popover.present({
-  //     ev: myEvent
-  //   });
-  // }
 
 }

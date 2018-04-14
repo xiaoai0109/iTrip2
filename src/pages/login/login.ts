@@ -6,7 +6,9 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user';
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 
-@IonicPage()
+@IonicPage({
+  name: 'page-login'
+})
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -28,17 +30,6 @@ export class LoginPage {
         () => this.navCtrl.setRoot(HomePage),
         error => console.log(error.message)
       );
-      
-      // var googleUser = firebase.auth().currentUser;
-      // if (googleUser) {
-      //   this.user.uid = googleUser.uid;
-      //   this.user.name = googleUser.displayName;
-      //   this.user.avater = googleUser.photoURL;
-      //   this.userService.updateUser(this.user);
-      // } else {
-      //   console.log("user failed", googleUser);
-      // }
-
 
   }
 

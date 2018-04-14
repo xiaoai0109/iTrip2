@@ -3,6 +3,11 @@
     <ion-title>
       iTrip
     </ion-title>
+    <ion-buttons end>
+      <button ion-button clear icon-only color="dark" (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -22,7 +27,7 @@
     </button>
   </ion-item>
 
-  <ion-card *ngFor="let trip of tripList | async" >
+  <ion-card *ngFor="let trip of tripList | async">
 
     <ion-item (click)="navToTrip(trip)">
       <div class="trip-name">{{trip.name}}</div>
