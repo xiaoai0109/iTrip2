@@ -3,4 +3,5 @@ export interface Trip {
     name: string;
     description: string;
     createdDate: string;
+    
 }
