@@ -5,25 +5,38 @@
       <button ion-button color="danger" strong>
         End</button>
     </ion-buttons>
+    <ion-buttons end>
+        <button ion-button strong (click)="change()" >
+          Change</button>
+      </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content (click)="change()" scroll="false">
-  <div #map id="map"></div>
+<ion-content scroll="false">
+  <!-- Slides for Media -->
+  <ion-slides pager *ngIf="isMask" (ionSlideDidChange)="slideChanged()" initialSlide="{{slideIndex}}" loop="true">
+    <ion-slide *ngFor="let photo of photos" (click)="closeSlides()">
+      <img [src]="photo" />
+      <h2>media.name</h2>
+      <p>Location: media.location</p>
+    </ion-slide>
+  </ion-slides>
+
+  <div #map id="map" *ngIf="!isMask"></div>
 
   <!-- for stay info -->
   <ion-item class="stay-detail" *ngIf="isShow" (click)="change()">
     <h2 class="stay-name">Roller</h2>
     <p class="info">Universial Studio Singapore</p>
     <ion-row class="row-center" nowrap>
-      <ion-col col-2 class="col" *ngFor="let photo of photos">
+      <ion-col col-2 class="col" *ngFor="let photo of photos; let i = index" (click)="showSlides(i)">
         <img src="{{photo}}">
       </ion-col>
     </ion-row>
   </ion-item>
 
   <!-- footer for story info -->
-  <ion-footer class="footer">
+  <ion-footer class="footer" *ngIf="!isMask">
     <ion-item no-lines>
       <p class="story-name">{{story.name}}</p>
       <p class="info">{{stayCount}} stays {{mediaCount}} photos</p>
