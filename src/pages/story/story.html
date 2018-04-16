@@ -2,7 +2,7 @@
   <ion-navbar>
     <ion-title>Story</ion-title>
     <ion-buttons end>
-      <button ion-button color="danger" strong>
+      <button ion-button color="danger" (click)="dropPoint()" strong>
         End</button>
     </ion-buttons>
   </ion-navbar>
@@ -12,6 +12,7 @@
   <div #map id="map"></div>
 
   <!-- for stay info -->
+  <!--<ion-item class="stay-detail" *ngIf="isShow" (click)="change()"> -->
   <ion-item class="stay-detail" *ngIf="isShow" (click)="change()">
     <h2 class="stay-name">Roller</h2>
     <p class="info">Universial Studio Singapore</p>
@@ -27,7 +28,7 @@
     <ion-item no-lines>
       <p class="story-name">{{story.name}}</p>
       <p class="info">{{stayCount}} stays {{mediaCount}} photos</p>
-      <button ion-button icon-only large item-end>
+      <button ion-button icon-only large item-end (click)="dropPoint()">
         <ion-icon name="camera"></ion-icon>
       </button>
     </ion-item>

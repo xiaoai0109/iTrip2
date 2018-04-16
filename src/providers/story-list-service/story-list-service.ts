@@ -7,12 +7,17 @@ import { NavParams } from 'ionic-angular';
 @Injectable()
 export class StoryListServiceProvider {
   private storyListRef;
+  private key;
 
   constructor(public http: HttpClient, private db : AngularFireDatabase) {
     console.log('Hello StoryListServiceProvider Provider');
         // need to pass tripId to constructor
-        // let tripId = 'ttt';
-        // this.storyListRef = this.db.list<Story>('/stories/' + tripId);
+        //let tripId = 'ttt';
+        //this.storyListRef = this.db.list<Story>('/stories/' + tripId);
+  }
+
+  getKey(){
+    return this.key;
   }
 
   getStoryList(tripId : string) {
@@ -22,7 +27,7 @@ export class StoryListServiceProvider {
 
   addStory(story : Story, tripId : string) {
     this.storyListRef = this.db.list<Story>('/stories/' + tripId);
-    return this.storyListRef.push(story);
+   this.key = this.storyListRef.push(story).key;
   }
 
   updateStory(story : Story, tripId : string) {

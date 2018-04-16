@@ -24,6 +24,9 @@ import { AuthService } from '../services/auth.service';
 import { UserServiceProvider } from '../providers/user-service/user-service';
 import { PopoverComponent } from '../components/popover/popover';
 import { ComponentsModule } from '../components/components.module';
+import { PathListServiceProvider } from '../providers/path-list-service/path-list-service';
+import { StayListServiceProvider } from '../providers/stay-list-service/stay-list-service';
+import { MediaListServiceProvider } from '../providers/media-list-service/media-list-service';
 
 @NgModule({
   declarations: [
@@ -58,7 +61,10 @@ import { ComponentsModule } from '../components/components.module';
     StoryListServiceProvider,
     AngularFireAuth,
 		AuthService,
-    UserServiceProvider
+    UserServiceProvider,
+    PathListServiceProvider,
+    StayListServiceProvider,
+    MediaListServiceProvider
   ]
 })
 export class AppModule {}

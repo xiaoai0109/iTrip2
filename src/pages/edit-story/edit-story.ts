@@ -17,7 +17,8 @@ export class EditStoryPage {
   story: Story = {
     name: '',
     description: '',
-    createdDate: ''
+    createdDate: '',
+    icon: ''
   };
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,

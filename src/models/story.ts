@@ -3,6 +3,7 @@ export interface Story {
     name: string;
     description?: string;
     createdDate: string;
+    icon: string;
     // pinCount: number;
     // photoCount: number;
 }
