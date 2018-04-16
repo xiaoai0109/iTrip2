@@ -13,7 +13,7 @@ import { PathListServiceProvider } from '../../providers/path-list-service/path-
 import { StayListServiceProvider } from '../../providers/stay-list-service/stay-list-service';
 import { Stay } from '../../models/stay';
 import { MediaListServiceProvider } from '../../providers/media-list-service/media-list-service';
-import { sha256 } from 'sha256';
+// import { sha256 } from 'sha256';
 
 declare var google;
 
