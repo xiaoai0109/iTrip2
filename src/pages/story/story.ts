@@ -66,6 +66,7 @@ export class StoryPage {
   }
 
   pathList: Observable<Location[]>;
+  stayList: Observable<Stay[]>;
   markers = [];
   path = [];
   ref = firebase.database().ref('geos/');
@@ -84,6 +85,14 @@ export class StoryPage {
       console.log(this.story.key);
       console.log(this.pathListService.getPathList());
       this.pathList = this.pathListService.getPathList().snapshotChanges()
+        .map(
+          changes => {
+            return changes.map(c => ({
+              key: c.payload.key, ...c.payload.val()
+            }))
+          }
+        )
+        this.stayList = this.stayListService.getStayList().snapshotChanges()
         .map(
           changes => {
             return changes.map(c => ({
@@ -161,6 +170,8 @@ export class StoryPage {
       //Add the marker for end point of the story
       var endlocation = new google.maps.LatLng(this.path[this.path.length - 1].lat, this.path[this.path.length - 1].long);
       this.addMarker(endlocation, image);
+
+      this.pathList
     }
 
 
@@ -248,6 +259,7 @@ export class StoryPage {
     }
   }
   dropPoint() {
+    
     this.geolocation.getCurrentPosition({
       maximumAge: 3000, timeout: 5000,
       enableHighAccuracy: true
@@ -286,7 +298,8 @@ export class StoryPage {
       this.stay.location.long = this.loc.long;
       this.stay.address = "Singapore"
       this.stayListService.addStay(this.stay, this.storyListService.getKey());
-      this.media.fileUrl = "assets/imgs/photo-l.JPG";
+      this.media.fileUrl = "http://cdn1.vox-cdn.com/assets/4677547/Screen_Shot_2014-06-26_at_5.13.43_PM.png";
+      this.photos.push(this.media.fileUrl);
       this.mediaListService.addMedia(this.media, this.storyListService.getKey(), this.stayListService.getKey());
 
 
@@ -310,6 +323,7 @@ export class StoryPage {
       else{
      //Point already exists(within 50m of last location) so just add the new media
       this.media.fileUrl = "assets/imgs/photo-l.JPG";
+      this.photos.push(this.media.fileUrl);
       this.mediaListService.addMedia(this.media, this.storyListService.getKey(), this.stayListService.getKey());
       }
 
