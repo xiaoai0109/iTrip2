@@ -24,6 +24,7 @@ import { AuthService } from '../services/auth.service';
 import { UserServiceProvider } from '../providers/user-service/user-service';
 import { PopoverComponent } from '../components/popover/popover';
 import { ComponentsModule } from '../components/components.module';
+import { Facebook } from '@ionic-native/facebook';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { ComponentsModule } from '../components/components.module';
     StoryListServiceProvider,
     AngularFireAuth,
 		AuthService,
-    UserServiceProvider
+    UserServiceProvider,
+    Facebook
   ]
 })
 export class AppModule {}

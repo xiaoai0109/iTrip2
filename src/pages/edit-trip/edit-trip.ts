@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { Trip } from '../../models/trip';
 import { TripListServiceProvider } from '../../providers/trip-list-service/trip-list-service';
 import { HomePage } from '../home/home';
+import { User } from '../../models/user';
 
 @IonicPage({
   name: 'page-edit-trip'
@@ -12,8 +13,9 @@ import { HomePage } from '../home/home';
   templateUrl: 'edit-trip.html',
 })
 export class EditTripPage {
-  uid : string = '';
+  // uid : string = '';
 
+  user : User;
   trip : Trip = {
     name: '',
     description: '',
@@ -22,7 +24,8 @@ export class EditTripPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
     private tripListService: TripListServiceProvider) {
-    this.uid = this.navParams.get('uid');
+    // this.uid = this.navParams.get('uid');
+    this.user = this.navParams.get('user');
     this.trip = this.navParams.get('trip');
   }
 
@@ -31,14 +34,14 @@ export class EditTripPage {
   }
 
   updateTrip(trip: Trip) {
-    this.tripListService.updateTrip(trip, this.uid).then(() => {
-      this.navCtrl.setRoot(HomePage);
+    this.tripListService.updateTrip(trip, this.user.uid).then(() => {
+      this.navCtrl.setRoot(HomePage, { user : this.user });
     })
   }
 
   removeTrip(trip: Trip) {
-    this.tripListService.removeTrip(trip, this.uid).then(() => {
-      this.navCtrl.setRoot(HomePage);
+    this.tripListService.removeTrip(trip, this.user.uid).then(() => {
+      this.navCtrl.setRoot(HomePage, { user : this.user });
     })
   }
 
