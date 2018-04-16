@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, AlertController, Slides } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Device } from '@ionic-native/device';
 import * as firebase from 'firebase';
@@ -25,10 +25,14 @@ declare var google;
   templateUrl: 'story.html',
 })
 export class StoryPage {
+  @ViewChild(Slides) slides: Slides;
 
   @ViewChild('map')
   mapElement: ElementRef;
   map;
+
+  isMask: boolean = false;
+  slideIndex;
 
   isShow: boolean = false;
 
@@ -400,6 +404,20 @@ export class StoryPage {
     //   return;
     // });
   }
+
+  showSlides(index) {
+    this.isMask = true;
+    this.slideIndex = index;
+  }
+
+  closeSlides() {
+    this.isMask = false;
+  }
+
+  slideChanged() {
+    let currentIndex = this.slides.getActiveIndex();
+  }
+
 }
 
 // Get the list of other position
