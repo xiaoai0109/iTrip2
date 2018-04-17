@@ -1,0 +1,13 @@
+<svg width="30" height="50" viewBox="0 0 43 70" xmlns="http://www.w3.org/2000/svg">
+
+<g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="45" width="72" y="-1" x="-1"/>
+</g>
+
+  <path
+    d="M25.015 2.4c-7.8 0-14.121 6.204-14.121 13.854 0 7.652 14.121 32.746 14.121 32.746s14.122-25.094 14.122-32.746c0-7.65-6.325-13.854-14.122-13.854z"
+    style="fill:#48C9B0;stroke:none;stroke-width:1.70731711;stroke-opacity:1" />
+</svg>
+
+<!-- #28B463 -->

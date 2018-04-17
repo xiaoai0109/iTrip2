@@ -88,10 +88,11 @@
         <variable name="APP_ID" value="166848030687999" />
         <variable name="APP_NAME" value="iTrip" />
     </plugin>
-    <engine name="ios" spec="~4.5.4" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
     </plugin>
     <plugin name="cordova-plugin-device" spec="^2.0.1" />
+    <engine name="ios" spec="4.5.4" />
     <engine name="android" spec="~7.0.0" />
+    <allow-navigation href="http://172.17.250.10:8100" />
 </widget>

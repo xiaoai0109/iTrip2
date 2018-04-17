@@ -44,16 +44,17 @@ export class LoginPage {
   loginWithFB() {
     this.facebook.login(['email', 'public_profile']).then((response: FacebookLoginResponse) => {
       this.facebook.api('me?fields=id,name,email,first_name,picture.width(100).height(100).as(pic)', []).then(profile => {
-        
         this.user.uid = profile['id'];
         this.user.name = profile['first_name'];
         this.user.avater = profile['pic']['data']['url'];
         this.userService.updateUser(this.user);
-
         if (this.user) {
           this.navCtrl.setRoot(HomePage, { user : this.user });
         }
       });
+    })
+    .catch(function(error) {
+      alert(error.message);
     });
     
   }

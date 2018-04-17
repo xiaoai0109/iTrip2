@@ -23,7 +23,6 @@ import { StoryListServiceProvider } from '../providers/story-list-service/story-
 import { AuthService } from '../services/auth.service';
 import { UserServiceProvider } from '../providers/user-service/user-service';
 import { PopoverComponent } from '../components/popover/popover';
-import { ComponentsModule } from '../components/components.module';
 import { PathListServiceProvider } from '../providers/path-list-service/path-list-service';
 import { StayListServiceProvider } from '../providers/stay-list-service/stay-list-service';
 import { MediaListServiceProvider } from '../providers/media-list-service/media-list-service';
@@ -34,6 +33,7 @@ import { Facebook } from '@ionic-native/facebook';
     MyApp,
     HomePage,
     LoginPage,
+    PopoverComponent
     
   ],
   imports: [
@@ -43,13 +43,13 @@ import { Facebook } from '@ionic-native/facebook';
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireDatabaseModule,
     AngularFireStorageModule,
-    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
-    LoginPage
+    LoginPage,
+    PopoverComponent
   ],
   providers: [
     StatusBar,

@@ -40,7 +40,7 @@
       <ion-card *ngFor="let story of storyList | async" background-color="light">
         <div (click)="navToStory(story)">
             <ion-item class="story-name">{{story.name}}</ion-item>
-            <img height="100" [src]="story.icon">
+            <img [src]="story.icon">
             <ion-item *ngIf="story.description" class="story-description">{{story.description}}</ion-item>
         </div>
         <ion-item>

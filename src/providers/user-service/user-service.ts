@@ -3,12 +3,6 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { User } from '../../models/user';
 
-/*
-  Generated class for the UserServiceProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class UserServiceProvider {
   private userListRef;
@@ -18,6 +12,9 @@ export class UserServiceProvider {
   }
 
   updateUser(user : User) {
+    window.localStorage.setItem('uid', user.uid);
+    window.localStorage.setItem('name', user.name);
+    window.localStorage.setItem('avater', user.avater);
     this.userListRef = this.db.list<User>('/users/');
     return this.userListRef.update(user.uid, user);
   }

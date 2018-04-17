@@ -39,7 +39,12 @@ export class HomePage {
     //   console.log("user failed", this.googleUser);
     // };
 
-    this.user = this.navParams.get('user');
+    // this.user = this.navParams.get('user');
+    // load user from local storage
+    this.user.uid = window.localStorage.getItem('uid');
+    this.user.name = window.localStorage.getItem('name');
+    this.user.avater = window.localStorage.getItem('avater');
+ 
     this.tripList = this.tripListService.getTripList(this.user.uid)
       .snapshotChanges()
       .map(
@@ -68,10 +73,5 @@ export class HomePage {
     popover.present({
       ev: myEvent
     });
-  }
-
-  logOut() {
-    this.facebook.logout();
-    this.navCtrl.setRoot('page-login');
   }
 }
