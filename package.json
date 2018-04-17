@@ -31,7 +31,7 @@
     "angularfire2": "^5.0.0-rc.6",
     "cordova-android": "7.0.0",
     "cordova-ios": "4.5.4",
-    "cordova-plugin-device": "^2.0.1",
+    "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-facebook4": "^1.10.1",
     "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
@@ -63,7 +63,7 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-facebook4": {
-        "APP_ID": "166848030687999",
+        "APP_ID": "2058286707781563",
         "APP_NAME": "iTrip"
       }
     },
