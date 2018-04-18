@@ -13,9 +13,11 @@ import { PathListServiceProvider } from '../../providers/path-list-service/path-
 import { StayListServiceProvider } from '../../providers/stay-list-service/stay-list-service';
 import { Stay } from '../../models/stay';
 import { MediaListServiceProvider } from '../../providers/media-list-service/media-list-service';
+import { CameraServiceProvider } from '../../providers/camera-service/camera-service';
 // import { sha256 } from 'sha256';
 
 declare var google;
+const LOCATION_THRESHOLD = 10;
 
 @IonicPage({
   name: 'page-story'
@@ -25,6 +27,8 @@ declare var google;
   templateUrl: 'story.html',
 })
 export class StoryPage {
+  image: Observable<any>;
+  
   @ViewChild(Slides) slides: Slides;
 
   @ViewChild('map')
@@ -76,8 +80,13 @@ export class StoryPage {
   ref = firebase.database().ref('geos/');
 
   // Inject Ionic Platform and required framework to the constructor
-  constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public datepipe: DatePipe,
-    private storyListService: StoryListServiceProvider, public platform: Platform, private geolocation: Geolocation, private device: Device, private pathListService: PathListServiceProvider, private stayListService: StayListServiceProvider, private mediaListService: MediaListServiceProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, 
+    private alertCtrl: AlertController, public datepipe: DatePipe,
+    private storyListService: StoryListServiceProvider, public platform: Platform, 
+    private geolocation: Geolocation, private device: Device, 
+    private pathListService: PathListServiceProvider, private stayListService: StayListServiceProvider, 
+    private mediaListService: MediaListServiceProvider,
+    private imageService: CameraServiceProvider) {
     this.tripId = this.navParams.get('tripId');
     // get story.name according to flag 'isStart' 
     let isStart = this.navParams.get('isStart');
@@ -418,7 +427,60 @@ export class StoryPage {
     let currentIndex = this.slides.getActiveIndex();
   }
 
-}
+  dropImage(){
+    this.geolocation.getCurrentPosition({maximumAge: 3000, timeout: 5000, enableHighAccuracy: true}).then((resp) => {
+      this.loc.lat = resp.coords.latitude;
+      this.loc.long = resp.coords.longitude;
+
+      this.imageService.captureImage().then(data => { /* Capture image and handle*/
+        let pointData = {
+          tripId: this.tripId,
+        }
+        let upload = this.imageService.uploadImage(data); /* Upload img to Firebase */
+        upload.then().then(res => { //update info to new point or current point
+          if(this.getDistance(this.loc, this.currentLocation) > LOCATION_THRESHOLD ){ //New points
+            var loc = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+            var img = 'assets/imgs/marker-example.svg';
+            var marker = this.addMarker(loc, img);
+            this.stay.location.lat = this.loc.lat;
+            this.stay.location.long = this.loc.long;
+            this.stay.address = ''; //Todo: update later by gg api
+            this.stayListService.addStay(this.stay, this.storyListService.getKey());
+            this.media.fileUrl = res.metadata.fullPath;
+            this.photos.push(this.media.fileUrl);
+            this.mediaListService.addMedia(this.media, this.storyListService.getKey(), this.stayListService.getKey());
+
+            //Display new point in the path
+            this.path.push(loc);
+            var mPath = new google.maps.Polyline({
+              path: this.path,
+              geodesic: true,
+              strokeColor: '#0000FF',
+              strokeOpacity: 0.7,
+              strokeWeight: 5
+            });
+            mPath.setMap(this.map);
+            //update DB to save this point on the path
+            this.pathListService.addPath(this.loc);
+            this.addPoint(this.loc);
+          }
+          else{ //Current point
+            this.media.fileUrl = res.metadata.fullPath;
+            this.photos.push(this.media.fileUrl);
+            this.mediaListService.addMedia(this.media, this.storyListService.getKey(), this.stayListService.getKey());
+          }
+          this.imageService.storeImageInformation(res.metadata, pointData);
+        }); /* Finish update info */
+      });/* Finish Capture image and handle*/
+
+      
+    });
+    
+  } /* End of dropImage() */
+
+
+
+} /* End of Class StoryPage */
 
 // Get the list of other position
 export const snapshotToArray = snapshot => {

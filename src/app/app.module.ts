@@ -27,6 +27,8 @@ import { PathListServiceProvider } from '../providers/path-list-service/path-lis
 import { StayListServiceProvider } from '../providers/stay-list-service/stay-list-service';
 import { MediaListServiceProvider } from '../providers/media-list-service/media-list-service';
 import { Facebook } from '@ionic-native/facebook';
+import { CameraServiceProvider } from '../providers/camera-service/camera-service';
+import { Camera } from '@ionic-native/camera';
 
 @NgModule({
   declarations: [
@@ -66,7 +68,9 @@ import { Facebook } from '@ionic-native/facebook';
     PathListServiceProvider,
     StayListServiceProvider,
     MediaListServiceProvider,
-    Facebook
+    Facebook,
+    CameraServiceProvider,
+    Camera
   ]
 })
 export class AppModule {}
