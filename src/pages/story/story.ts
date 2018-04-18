@@ -433,9 +433,6 @@ export class StoryPage {
       this.loc.long = resp.coords.longitude;
 
       this.imageService.captureImage().then(data => { /* Capture image and handle*/
-        let pointData = {
-          tripId: this.tripId,
-        }
         let upload = this.imageService.uploadImage(data); /* Upload img to Firebase */
         upload.then().then(res => { //update info to new point or current point
           if(this.getDistance(this.loc, this.currentLocation) > LOCATION_THRESHOLD ){ //New points
@@ -469,7 +466,16 @@ export class StoryPage {
             this.photos.push(this.media.fileUrl);
             this.mediaListService.addMedia(this.media, this.storyListService.getKey(), this.stayListService.getKey());
           }
-          this.imageService.storeImageInformation(res.metadata, pointData);
+
+          //create metadata for images (res from upload, imgData is addition)
+          let imgData = {
+            imgTripId: this.tripId,
+            imgStoryId: this.story,
+            imgPointId: this.stay,
+            imgGpsLat: this.stay.location.lat,
+            imgGpsLong: this.stay.location.long,
+          }
+          this.imageService.storeImageInformation(res.metadata, imgData);
         }); /* Finish update info */
       });/* Finish Capture image and handle*/
 

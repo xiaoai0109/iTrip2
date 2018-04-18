@@ -44,6 +44,11 @@ export class CameraServiceProvider {
       url: metainfo.downloadURLs[0],
       fullPath: metainfo.fullPath,
       contentType: metainfo.contentType,
+      tripId: otherData.imgTripId,
+      storyId: otherData.imgStoryId,
+      pointId: otherData.imgPointId,
+      lat: otherData.imgGpsLat,
+      long: otherData.imgGpsLong,
     }
       this.db.list('images').push(toSave);
   }
