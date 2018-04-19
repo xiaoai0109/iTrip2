@@ -32,39 +32,7 @@ export class TripPage {
   storyCount: number = 0;
   photoCount: number = 15;
 
-  mediaList: Media[] = [
-    {
-      name: '',
-      location: 'Universal Studio Singapore, Sentosa',
-      createdDate: 'Apr 09, 2018',
-      fileUrl: 'assets/imgs/photo-l.JPG'
-    },
-    {
-      name: 'Roller Roaster',
-      location: 'Universal Studio Singapore, Sentosa',
-      createdDate: 'Apr 09, 2018',
-      fileUrl: 'assets/imgs/photo-l.JPG'
-    },
-    {
-      name: 'Haunted House',
-      location: 'Haunted House, USS, Sentosa',
-      createdDate: 'Apr 09, 2018',
-      fileUrl: 'assets/imgs/photo-p.JPG'
-    },
-    {
-      name: 'Haunted House',
-      location: 'Haunted House, USS, Sentosa',
-      createdDate: 'Apr 09, 2018',
-      fileUrl: 'assets/imgs/photo-p.JPG'
-    },
-    {
-      name: 'Haunted House',
-      location: 'Haunted House, USS, Sentosa',
-      createdDate: 'Apr 09, 2018',
-      fileUrl: 'assets/imgs/photo-l.JPG'
-    }
-  ]
-  // static data above
+  mediaList: Media[];
 
   isMask: boolean = false;
   slideIndex;

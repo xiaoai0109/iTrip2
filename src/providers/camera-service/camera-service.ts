@@ -20,7 +20,7 @@ export class CameraServiceProvider {
 
   captureImage(){
     const options: CameraOptions = {
-      quality: 100,
+      quality: 50,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
@@ -38,7 +38,7 @@ export class CameraServiceProvider {
     return storageRef.putString(image, 'base64', { contentType:'jpg'});
   }
 
-  storeImageInformation(metainfo, otherData) {
+  storeImageInformation(metainfo, otherData, storyId, stayId) {
     let toSave = {
       created: metainfo.timeCreated,
       url: metainfo.downloadURLs[0],
@@ -50,7 +50,7 @@ export class CameraServiceProvider {
       lat: otherData.imgGpsLat,
       long: otherData.imgGpsLong,
     }
-      this.db.list('images').push(toSave);
+      this.db.list("/Media/"+storyId+"/"+stayId).push(toSave);
   }
 
 }//End of CameraProvideProvider

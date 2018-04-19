@@ -61,8 +61,9 @@ export class StoryPage {
   };
   media: Media = {
     fileUrl: '',
-    location: '',
+    location: this.stay,
     createdDate: '',
+    downloadUrl: '',
   }
   currentLocation: Location = {
     lat: 0,
@@ -443,10 +444,7 @@ export class StoryPage {
             this.stay.location.long = this.loc.long;
             this.stay.address = ''; //Todo: update later by gg api
             this.stayListService.addStay(this.stay, this.storyListService.getKey());
-            this.media.fileUrl = res.metadata.fullPath;
-            this.photos.push(this.media.fileUrl);
-            this.mediaListService.addMedia(this.media, this.storyListService.getKey(), this.stayListService.getKey());
-
+            
             //Display new point in the path
             this.path.push(loc);
             var mPath = new google.maps.Polyline({
@@ -461,21 +459,15 @@ export class StoryPage {
             this.pathListService.addPath(this.loc);
             this.addPoint(this.loc);
           }
-          else{ //Current point
-            this.media.fileUrl = res.metadata.fullPath;
-            this.photos.push(this.media.fileUrl);
-            this.mediaListService.addMedia(this.media, this.storyListService.getKey(), this.stayListService.getKey());
-          }
+          
+          //Both case (new or current point) we have to save data into firebase
+          this.media.fileUrl = res.metadata.fullPath;
+          this.media.location = this.stay;
+          this.media.createdDate = res.metadata.timeCreated;
+          this.media.downloadUrl = res.metadata.downloadURLs[0];
 
-          //create metadata for images (res from upload, imgData is addition)
-          let imgData = {
-            imgTripId: this.tripId,
-            imgStoryId: this.story,
-            imgPointId: this.stay,
-            imgGpsLat: this.stay.location.lat,
-            imgGpsLong: this.stay.location.long,
-          }
-          this.imageService.storeImageInformation(res.metadata, imgData);
+          this.photos.push(this.media.fileUrl);
+          this.mediaListService.addMedia(this.media, this.storyListService.getKey(), this.stayListService.getKey());
         }); /* Finish update info */
       });/* Finish Capture image and handle*/
 
