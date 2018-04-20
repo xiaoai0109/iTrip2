@@ -40,7 +40,7 @@
       <ion-card *ngFor="let story of storyList | async" background-color="light">
         <div (click)="navToStory(story)">
             <ion-item class="story-name">{{story.name}}</ion-item>
-            <img [src]="story.icon">
+            <img [src]="story.cover">
             <ion-item *ngIf="story.description" class="story-description">{{story.description}}</ion-item>
         </div>
         <ion-item>
@@ -53,13 +53,27 @@
 
     <!-- Segment: photos (Grid View) s-->
     <div *ngSwitchCase="'photos'">
-      <ion-grid>
+
+        <ion-list>
+            <ion-item-group *ngFor="let story of storyList | async">
+              <ion-item-divider>{{story.name}}</ion-item-divider>
+              <ion-grid>
+                  <ion-row class="row-center">
+                    <ion-col col-4 *ngFor="let media of mediaListForTrip[story.key] | async; let i = index" (click)="showSlides(i)">
+                      <img [src]="media.fileUrl">
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+            </ion-item-group>
+          </ion-list>
+
+      <!-- <ion-grid>
         <ion-row class="row-center">
           <ion-col col-4 *ngFor="let media of mediaList; let i = index" (click)="showSlides(i)">
             <img [src]="media.fileUrl">
           </ion-col>
         </ion-row>
-      </ion-grid>
+      </ion-grid> -->
     </div>
   </div>
 
