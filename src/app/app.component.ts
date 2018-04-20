@@ -9,7 +9,7 @@ import { LoginPage } from '../pages/login/login';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any;
+  rootPage: any;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
@@ -20,16 +20,16 @@ export class MyApp {
       this.checkPreviousAuthorization();
     });
   }
-
-  checkPreviousAuthorization(): void { 
-    if((window.localStorage.getItem('uid') === "undefined" || window.localStorage.getItem('uid') === null) && 
-       (window.localStorage.getItem('name') === "undefined" || window.localStorage.getItem('name') === null) &&
-       (window.localStorage.getItem('avater') === "undefined" || window.localStorage.getItem('avater') === null)) {
+  checkPreviousAuthorization(): void {
+    if ((window.localStorage.getItem('uid') === "undefined" || window.localStorage.getItem('uid') === null) &&
+      (window.localStorage.getItem('name') === "undefined" || window.localStorage.getItem('name') === null) &&
+      (window.localStorage.getItem('avater') === "undefined" || window.localStorage.getItem('avater') === null)) {
       this.rootPage = LoginPage;
     } else {
       this.rootPage = HomePage;
     }
-  }  
+  }
 
 }
+
 

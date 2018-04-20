@@ -18,7 +18,7 @@ export class EditStoryPage {
     name: '',
     description: '',
     createdDate: '',
-    icon: ''
+    cover: ''
   };
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,

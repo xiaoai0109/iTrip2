@@ -18,6 +18,7 @@ page-story {
         position: fixed;
         display: block;
         bottom: 72px;
+        z-index: 1;
     }
     .stay-name {
         color: lightslategray;

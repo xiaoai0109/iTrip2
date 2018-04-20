@@ -33,11 +33,18 @@ export class StoryPage {
 
   isMask: boolean = false;
   slideIndex;
+  firstStay: boolean = true;
 
   isShow: boolean = false;
+  counter_stay = 0;
 
   // static data below
-  photos: string[] = ["assets/imgs/photo-l.JPG"];
+  // photos: string[] = ["assets/imgs/photo-l.JPG"];
+  static photos: string[] = [];
+  // static photosForStay: Observable<Media[]>;
+  photos: string[] = [];
+  photosForStay: Observable<Media[]>;
+  story_photos: string[][] = [[]];
   stayCount: number = 11;
   mediaCount: number = 15;
   // static data above
@@ -48,12 +55,13 @@ export class StoryPage {
     name: '',
     description: '',
     createdDate: '',
-    icon: ''
+    cover: ''
   };
   stay: Stay = {
-    location: { lat: 0, long: 0 },
+    // location: { lat: 0, long: 0 },
+    lat: 0,
+    long: 0,
     address: '',
-    key: ''
   };
   media: Media = {
     fileUrl: '',
@@ -72,159 +80,191 @@ export class StoryPage {
   pathList: Observable<Location[]>;
   stayList: Observable<Stay[]>;
   markers = [];
-  path = [];
+  newPath = [];
+  // static sMediaListService;
+  // path = [];
   ref = firebase.database().ref('geos/');
 
   // Inject Ionic Platform and required framework to the constructor
   constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public datepipe: DatePipe,
-    private storyListService: StoryListServiceProvider, public platform: Platform, private geolocation: Geolocation, private device: Device, private pathListService: PathListServiceProvider, private stayListService: StayListServiceProvider, private mediaListService: MediaListServiceProvider) {
+    private storyListService: StoryListServiceProvider, private mediaListService: MediaListServiceProvider, private pathListService: PathListServiceProvider, private stayListService: StayListServiceProvider,
+    public platform: Platform, private geolocation: Geolocation, private device: Device) {
+    // get isStart, if (isStart) => prompt(), addStory(), addStay(First)
+    // all then initMap() => get StayList, 
+    // forEach staylist dropPoint(addMarker, addPath)
+
+    // TakeNewPhoto : TakePhoto => get url, get loc, 
+    //    if (loc - currentLocation > 10), addStay, dropPoint()
+    //    then addMedia to last stay 
+
+    // EndStory : addStay, dropPoint, 
+
+    // dropPoint => (addMarker to map, addListener(click => get photos from MediaList of this stay), 
+    //               push marker to markers, push loc to Path, draw Polyline)
+    // addStay => addStay to DB, genStoryCover()
+
+    // StoryPage.sMediaListService = this.mediaListService;
     this.tripId = this.navParams.get('tripId');
-    // get story.name according to flag 'isStart' 
     let isStart = this.navParams.get('isStart');
+    // initialize the map 
+    this.geolocation.getCurrentPosition({
+      maximumAge: 3000, timeout: 5000,
+      enableHighAccuracy: true
+    }).then((resp) => {
+      var myLocation = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+      this.map = new google.maps.Map(this.mapElement.nativeElement, {
+        zoom: 15,
+        center: myLocation
+      });
+    });
     if (isStart) {
       this.presentPrompt();
     } else {
       this.story = this.navParams.get('story');
-      this.pathListService.setKey(this.story.key);
-      console.log(this.story.key);
-      console.log(this.pathListService.getPathList());
-      this.pathList = this.pathListService.getPathList().snapshotChanges()
-        .map(
-          changes => {
-            return changes.map(c => ({
-              key: c.payload.key, ...c.payload.val()
-            }))
-          }
-        )
-        this.stayList = this.stayListService.getStayList().snapshotChanges()
-        .map(
-          changes => {
-            return changes.map(c => ({
-              key: c.payload.key, ...c.payload.val()
-            }))
-          }
-        )
       this.platform.ready().then(() => {
-        this.initMap(false);
+        this.initMap();
       });
     }
-
 
   }
 
-  initMap(isStart) {
-    var image = 'assets/imgs/marker-example.svg';
-    if (isStart) {
-      
-      this.geolocation.getCurrentPosition({
-        maximumAge: 3000, timeout: 5000,
-        enableHighAccuracy: true
-      }).then((resp) => {
-        var myLocation = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-        this.map = new google.maps.Map(this.mapElement.nativeElement, {
-          zoom: 15,
-          center: myLocation
-        });
-        //Add start point here
-        this.addMarker(myLocation, image);
-        this.currentLocation.lat = resp.coords.latitude;
-        this.currentLocation.long = resp.coords.longitude;
-        this.pathListService.addPath(this.currentLocation);
-        this.path.push(myLocation);
-        //Add the first stay point here just in DB 
-        //Story must have been created at this point , get the key for story
-        this.stay.location.lat = this.loc.lat;
-        this.stay.location.long = this.loc.long;
-        this.stay.address = "Singapore"
-        this.stayListService.addStay(this.stay, this.storyListService.getKey());
-        //create icon for list of stories
-        var API_key = "AIzaSyDenrrtx-cvyF7Nl6Xb-dABsneP6f2mm3o";
-        this.story.icon = "https://maps.googleapis.com/maps/api/staticmap?center=" + this.currentLocation.lat + "," + this.currentLocation.long + "&zoom=12&size=400x100&scale=2&markers=color:red%7Clabel:S%7C" + this.currentLocation.lat + "," + this.currentLocation.long + "&key=" + API_key + "&path=color:0x0000ff|weight:5";
-        this.addPoint(this.currentLocation);
-      });
-    }
-    else {
-      //View the story, get all the points of the path from db and display
-      let start = true;
-      this.pathList.subscribe(pathList => pathList.forEach(element => {
-        console.log("Retrieve location points " + element);
-        if (start) {
-          var myLocation = new google.maps.LatLng(element.lat, element.long);
-          this.map = new google.maps.Map(this.mapElement.nativeElement, {
-            zoom: 15,
-            center: myLocation
-          });
-          this.addMarker(myLocation, image);
-          start = false;
+  initMap() {
+    this.stayList = this.stayListService.getStayList(this.story.key).snapshotChanges()
+      .map(
+        changes => {
+          console.log('getStayList', this.story.key);
+          return changes.map(c => {
+            // this.addMarkerandPath(c);
+            return { key: c.payload.key, ...c.payload.val()
+          }})
         }
+      );
+    // View the story, get all the points of the path from db and display
+
+    this.firstStay = true;
+    var IsInitMap = true;
+    this.stayList.subscribe(stayList => stayList.forEach(element => {
+      if (IsInitMap) {
+        this.addMarkerandPath(element);
+      }
 
 
 
-        this.path.push(new google.maps.LatLng(element.lat, element.long));
-        var mPath = new google.maps.Polyline({
-          path: this.path,
-          geodesic: true,
-          strokeColor: '#0000FF',
-          strokeOpacity: 0.7,
-          strokeWeight: 5
-        });
-        mPath.setMap(this.map);
+    }));
 
-      }));
-      //Add the marker for end point of the story
-      var endlocation = new google.maps.LatLng(this.path[this.path.length - 1].lat, this.path[this.path.length - 1].long);
-      this.addMarker(endlocation, image);
-
-      this.pathList
-    }
-
-
-
-
-    /*var watch = this.geolocation.watchPosition();
-    watch.subscribe((data) => {
-      this.deleteMarkers();
-      this.updateGeolocation(this.device.uuid, data.coords.latitude, data.coords.longitude);
-      var updateLocation = new google.maps.LatLng(data.coords.latitude, data.coords.longitude);
-      // var image = 'assets/imgs/marker.JPG';
-      this.addMarker(updateLocation, image);
-      this.setMapOnAll(this.map);
-    });*/
+    IsInitMap = false;
   }
+  addMarkerandPath(element) {
 
-  addPoint(location) {
-    this.story.icon = this.story.icon + "|" + location.lat + "," + location.long;
+    console.log('this.stay ', this.stay.key);
+
+    var myLocation = new google.maps.LatLng(element.lat, element.long);
+    var loc = { lat: element.lat, long: element.long };
+    console.log('loc.lat', loc.lat);
+    if (this.firstStay) {
+      // this.map = new google.maps.Map(this.mapElement.nativeElement, {
+      //   zoom: 15,
+      //   center: myLocation
+      // });
+      var image = 'assets/imgs/marker-red.svg';
+      this.addMarker(myLocation, image);
+      console.log('add marker ?', myLocation);
+      this.drawPath(myLocation);
+      this.firstStay = false;
+
+    } else {
+      var image = 'assets/imgs/marker-green.svg';
+      this.addMarker(myLocation, image);
+      this.drawPath(myLocation);
+      console.log('add marker ?', image);
+    }
+    this.currentLocation = loc;
+
+  }
+  genStoryCover(location) {
+    // Toshi's api_key
+    // var API_key = "AIzaSyDenrrtx-cvyF7Nl6Xb-dABsneP6f2mm3o";
+    // Peiyan's api_key 
+    var API_key = "AIzaSyBNqJryyNoAtZp0LwqFz6ABzS2bBMh6u10";
+    this.story.cover = "https://maps.googleapis.com/maps/api/staticmap?center=" + location.lat + "," + location.long + "&zoom=12&size=400x100&scale=2&markers=color:red%7Clabel:S%7C" + this.currentLocation.lat + "," + this.currentLocation.long + "&key=" + API_key + "&path=color:0x0000ff|weight:5";
+    // this.story.cover = "https://maps.googleapis.com/maps/api/staticmap?center=" + this.currentLocation.lat + "," + this.currentLocation.long + "&zoom=12&size=400x100&scale=2&markers=color:red%7Clabel:S%7C" + this.currentLocation.lat + "," + this.currentLocation.long + "&key=" + API_key + "&path=color:0x0000ff|weight:5";
+    this.story.cover = this.story.cover + "|" + location.lat + "," + location.long;
     this.storyListService.updateStory(this.story, this.tripId);
 
   }
   addMarker(location, image) {
 
+    var marker = new google.maps.Marker({
+      position: location,
+      map: this.map,
+      icon: image,
+      title: this.stay.key
+    });
+    // console.log('marker.location',marker.position.toString());
+    // console.log('addMarker?', 'yes');
+    this.markers.push(marker);
+    var me = this;
+    google.maps.event.addListener(marker, 'click', (function (story_key, stay_key) {
+      {
+        return function () {
+          console.log("listener clicked for " + stay_key)
+          me.photosForStay = me.mediaListService.getMediaList(story_key, stay_key).snapshotChanges()
+            .map(
+              changes => {
+                return changes.map(c => {
+                  return { key: c.payload.key, ...c.payload.val()
+                }})
+              }
+            );
+          me.change();
+          
+        }
+      }
+    })(this.story.key, this.stay.key));
 
-    var mar = this.SearchMarker(location);
-    if (mar == 0) {
-      var marker = new google.maps.Marker({
-        position: location,
-        map: this.map,
-        icon: image,
+    //     google.maps.event.addListener(marker, 'click', (function(story_key,stay_key) {
+    //       {
+    //         return function(){
+    //         console.log("listener clicked for "+stay_key)  
+    //         StoryPage.photosForStay = StoryPage.sMediaListService.getMediaList(story_key, stay_key).snapshotChanges()
+    //         .map(
+    //           changes => {
+    //             return changes.map(c => ({
+    //               key: c.payload.key, ...c.payload.val()
+    //             }))
+    //           }
+    //         );
+    //         me.change();
+    //         } 
+    //       }
+    //  })(this.story.key,this.stay.key));
+
+    console.log("listener added for " + this.story.key + " , " + this.stay.key);
+    // this.story_photos[this.markers.length - 1] = [];
+    // if (!this.story_photos[this.markers.length - 1])
+    //   this.story_photos[this.markers.length - 1] = [];
+    return marker;
+  }
+
+  drawPath(location) {
+    this.newPath.push(location);
+    console.log('length of newPath', this.newPath.length);
+    if (this.newPath.length !== 1) {
+      var mPath = new google.maps.Polyline({
+        path: this.newPath,
+        geodesic: true,
+        strokeColor: '#0000FF',
+        strokeOpacity: 0.7,
+        strokeWeight: 5
       });
-      this.markers.push(marker);
-      return marker;
+      mPath.setMap(this.map);
     }
-    return mar;
   }
 
-  SearchMarker(location) {
-    for (var i = 0; i < this.markers.length; i++) {
-      if (this.markers[i].lat == location.lat && this.markers[i].long == location.long)
-        return this.markers[i];
-    }
-    return 0;
-  }
   deleteMarkers() {
     this.clearMarkers();
     this.markers = [];
   }
-
   clearMarkers() {
     this.setMapOnAll(null);
   }
@@ -235,106 +275,131 @@ export class StoryPage {
     }
   }
 
-  updateGeolocation(uuid, lat, lng) {
-    if (localStorage.getItem('myKey')) {
-      firebase.database().ref('geos/' + localStorage.getItem('myKey')).set({
-        latitude: lat,
-        longitude: lng,
-      });
-    } else {
-      var newData = this.ref.push();
-      newData.set({
-        latitude: lat,
-        longitude: lng,
-      });
-      localStorage.setItem('myKey', newData.key);
-    }
-  }
-
   ionViewDidLoad() {
     console.log('ionViewDidLoad StoryPage');
   }
 
-  change() {
-    if (this.isShow == true) {
-      this.isShow = false;
-    } else if (this.isShow == false) {
-      this.isShow = true;
-    }
-  }
-  dropPoint() {
-    
+  takeNewPhoto() {
+    // TODO: take photo, get local fileUrl
+    var photoUrl = 'assets/imgs/photo-l.JPG';
+    var image = 'assets/imgs/marker-blue.svg';
     this.geolocation.getCurrentPosition({
       maximumAge: 3000, timeout: 5000,
       enableHighAccuracy: true
     }).then((resp) => {
-     
+      var myLocation = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
       this.loc.lat = resp.coords.latitude;
       this.loc.long = resp.coords.longitude;
-      
-      //this.stay.key = this.loc.lat+""+this.loc.long;
-     // this.stay.key = sha256(this.loc.lat + "" + this.loc.long);
-      //this.stay.address = "Singapore";
-      //if (marker == 0)//this location already exists
-       // this.stayListService.addStay(this.stay, this.story.key);
+      if (this.getDistance(this.loc, this.currentLocation) > 20) {
 
-      //this.media.fileUrl = "assets/imgs/photo-l.JPG";
-     // this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
-      //TODO : go through the list of media and set it to photos[]
-      /*marker.addListener('click', function () {
-        this.photos.push(this.media.fileUrl);
-        this.change();
-        for (var i = 0; i < this.photos.length; i++)
-          console.log(this.photos[i]);
-      });*/
+        // this.addMarker(myLocation, image);
+        // this.drawPath(myLocation);
+        this.currentLocation = this.loc;
+        this.addStay();
 
-     // console.log(sha256(this.loc.lat + "" + this.loc.long));
-
-      //add a point in path only when moved by 50m and photo is taken
-      
-      if (this.getDistance(this.loc, this.currentLocation) > 10) {
-        var image = 'assets/imgs/marker-example.svg';
-      var loc = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-      var marker = this.addMarker(loc, image);
-      this.loc.lat = resp.coords.latitude;
-      this.loc.long = resp.coords.longitude;
-      this.stay.location.lat = this.loc.lat;
-      this.stay.location.long = this.loc.long;
-      this.stay.address = "Singapore"
-      this.stayListService.addStay(this.stay, this.storyListService.getKey());
-      this.media.fileUrl = "http://cdn1.vox-cdn.com/assets/4677547/Screen_Shot_2014-06-26_at_5.13.43_PM.png";
-      this.photos.push(this.media.fileUrl);
-      this.mediaListService.addMedia(this.media, this.storyListService.getKey(), this.stayListService.getKey());
-
-
-        this.currentLocation.lat = this.loc.lat;
-        this.currentLocation.long = this.loc.long;
-
-        //show this point in the path also
-        this.path.push(loc);
-        var mPath = new google.maps.Polyline({
-          path: this.path,
-          geodesic: true,
-          strokeColor: '#0000FF',
-          strokeOpacity: 0.7,
-          strokeWeight: 5
-        });
-        mPath.setMap(this.map);
-        //update DB to save this point on the path
-        this.pathListService.addPath(this.loc);
-        this.addPoint(this.loc);
       }
-      else{
-     //Point already exists(within 50m of last location) so just add the new media
-      this.media.fileUrl = "assets/imgs/photo-l.JPG";
-      this.photos.push(this.media.fileUrl);
-      this.mediaListService.addMedia(this.media, this.storyListService.getKey(), this.stayListService.getKey());
-      }
-
-
+      // add Media to DB
+      this.media.fileUrl = photoUrl;
+      this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
     });
 
   }
+
+
+  // dropPoint() {
+
+  //   this.geolocation.getCurrentPosition({
+  //     maximumAge: 3000, timeout: 5000,
+  //     enableHighAccuracy: true
+  //   }).then((resp) => {
+
+  //     this.loc.lat = resp.coords.latitude;
+  //     this.loc.long = resp.coords.longitude;
+  //     console.log('Location loc', this.loc.lat + " " + this.loc.long);
+
+  //     //this.stay.key = this.loc.lat+""+this.loc.long;
+  //     // this.stay.key = sha256(this.loc.lat + "" + this.loc.long);
+  //     //this.stay.address = "Singapore";
+  //     //if (marker == 0)//this location already exists
+  //     // this.stayListService.addStay(this.stay, this.story.key);
+
+  //     //this.media.fileUrl = "assets/imgs/photo-l.JPG";
+  //     // this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
+  //     //TODO : go through the list of media and set it to photos[]
+  //     /*marker.addListener('click', function () {
+  //       this.photos.push(this.media.fileUrl);
+  //       this.change();
+  //       for (var i = 0; i < this.photos.length; i++)
+  //         console.log(this.photos[i]);
+  //     });*/
+
+  //     // console.log(sha256(this.loc.lat + "" + this.loc.long));
+
+  //     //add a point in path only when moved by 50m and photo is taken
+  //     var images = ['assets/imgs/marker-red.svg', 'assets/imgs/marker-green.svg', 'assets/imgs/marker-yellow.svg', 'assets/imgs/marker-purple.svg', 'assets/imgs/marker-blue.svg', 'assets/imgs/marker-orange.svg'];
+  //     if (this.getDistance(this.loc, this.currentLocation) > 1) {
+  //       // var image = 'assets/imgs/marker-example.2.svg';
+  //       var image = images[Math.floor(Math.random() * Math.floor(6))];
+
+  //       var loc = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+  //       console.log('maps.LatLng loc', loc);
+  //       var marker = this.addMarker(loc, image);
+
+  //       //     cannot use - addlistener
+  //       //     var i = this.markers.length-1;
+
+  //       //     google.maps.event.addListener(marker, 'click', (function(marker,i) {
+  //       //       {
+
+  //       //         for(var j =0;j<this.photos.length;j++)
+  //       //         this.photos.pop();
+  //       //         for(var j =0;j<this.story_photos[i].length;j++)
+  //       //         this.photos.push(this.story_photos[i][j]);
+  //       //         this.change();
+  //       //         console.log(marker + "  i: " + i);    
+  //       //       }
+  //       //  })(marker, i));
+
+  //       // change loc for what?
+  //       this.loc.lat = resp.coords.latitude;
+  //       this.loc.long = resp.coords.longitude;
+  //       this.stay.location.lat = this.loc.lat;
+  //       this.stay.location.long = this.loc.long;
+  //       this.stay.address = "Singapore"
+  //       this.stayListService.addStay(this.stay, this.story.key);
+  //       this.media.fileUrl = "http://cdn1.vox-cdn.com/assets/4677547/Screen_Shot_2014-06-26_at_5.13.43_PM.png";
+  //       // this.photos.push(this.media.fileUrl);
+  //       this.story_photos[this.markers.length - 1].push(this.media.fileUrl);
+  //       this.mediaListService.addMedia(this.media, this.story.key, this.stayListService.getKey());
+
+  //       // update currentLocation
+  //       this.currentLocation.lat = this.loc.lat;
+  //       this.currentLocation.long = this.loc.long;
+
+  //       //show this point in the path also
+  //       this.path.push(loc);
+  //       var mPath = new google.maps.Polyline({
+  //         path: this.path,
+  //         geodesic: true,
+  //         strokeColor: '#0000FF',
+  //         strokeOpacity: 0.7,
+  //         strokeWeight: 5
+  //       });
+  //       mPath.setMap(this.map);
+  //       //update DB to save this point on the path
+  //       this.pathListService.addPath(this.loc);
+  //       this.genStoryCover(this.loc);
+  //     }
+  //     else {
+  //       //Point already exists(within 50m of last location) so just add the new media
+  //       this.media.fileUrl = "assets/imgs/photo-l.JPG";
+  //       // this.photos.push(this.media.fileUrl);
+  //       this.story_photos[this.markers.length - 1].push(this.media.fileUrl);
+  //       // use the last stay id
+  //       this.mediaListService.addMedia(this.media, this.story.key, this.stayListService.getKey());
+  //     }
+  //   });
+  // }
   getDistance(p1, p2) {
     var R = 6378137; // Earth’s mean radius in meter
     var dLat = this.rad(p2.lat - p1.lat);
@@ -351,17 +416,10 @@ export class StoryPage {
   }
 
   endStory() {
-    this.dropPoint();
-    var image = 'assets/imgs/marker-example.svg';
-    this.addMarker(this.path[this.path.length - 1], image);
+    // this.dropPoint();
+    // var image = 'assets/imgs/marker-blue.svg';
+    // this.addMarker(this.path[this.path.length - 1], image);
   }
-
-  // presentPopover(myEvent) {
-  //   let popover = this.popoverCtrl.create(PopoverComponent);
-  //   popover.present({
-  //     ev: myEvent
-  //   });
-  // }
 
   // a PromptAlert to add story 
   presentPrompt() {
@@ -374,21 +432,18 @@ export class StoryPage {
         text: 'Start',
         handler: data => {
           if (data.name !== '') {
+            // add story
             this.story.name = data.name;
             this.story.createdDate = this.datepipe.transform(new Date(), 'mediumDate');
-            // add story
-
+            // console.log('story.name', this.story.name);
             this.storyListService.addStory(this.story, this.tripId);
-            this.pathListService.setKey(this.storyListService.getKey());
             this.story.key = this.storyListService.getKey();
+            console.log('start story.key', this.story.key);
+            // this.addStay();
 
             this.platform.ready().then(() => {
-              this.initMap(true);
+              this.initMap();
             });
-
-
-
-
           } else {
             return false;
           }
@@ -397,12 +452,34 @@ export class StoryPage {
     });
     alert.present();
 
-    // alert.present().then(() => {
-    //   const firstInput: any = document.querySelector('ion-alert input');
-    //   console.log("firstinput", firstInput);
-    //   firstInput.focus();
-    //   return;
-    // });
+    // add stay (startPoint)
+
+  }
+
+  addStay() {
+
+    //Add the first stay to DB 
+    //Story must have been created at this point
+    this.stay.lat = this.currentLocation.lat;
+    this.stay.long = this.currentLocation.long;
+    this.stay.address = "Singapore";
+    console.log('addStay story.key', this.story.key);
+    this.stayListService.addStay(this.stay, this.story.key);
+    this.stay.key = this.stayListService.getKey();
+    console.log('addStay stay.key', this.stay.key);
+    this.addMarkerandPath(this.currentLocation);
+    // generate cover for this story
+    // this.genStoryCover(this.currentLocation); currentLocation = {lat: x, long: y}
+    var newLocation: Location = { lat: this.stay.lat, long: this.stay.long };
+    this.genStoryCover(newLocation);
+
+  }
+
+  change() {
+    // StoryPage.isShow = !StoryPage.isShow;
+    this.isShow = !this.isShow;
+    // console.log("change() "+StoryPage.isShow);
+    console.log("change() " + this.isShow);
   }
 
   showSlides(index) {

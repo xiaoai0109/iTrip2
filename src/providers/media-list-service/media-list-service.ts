@@ -12,17 +12,22 @@ import { NavParams } from 'ionic-angular';
 @Injectable()
 export class MediaListServiceProvider {
   private mediaListRef;
-  constructor(public http: HttpClient,private db : AngularFireDatabase) {
+  constructor(public http: HttpClient, private db: AngularFireDatabase) {
     console.log('Hello MediaListServiceProvider Provider');
   }
-  addMedia(media:Media,storyid,stayid){
-    this.mediaListRef= this.db.list<Media>("/Media/"+storyid+"/"+stayid);
-  return this.mediaListRef.push(media);
- }
- getStayList(storyid,stayid){
-  this.mediaListRef= this.db.list<Media>("/Media/"+storyid+"/"+stayid);
-   return this.mediaListRef;
+  addMedia(media: Media, storyId: string, stayId: string) {
+    this.mediaListRef = this.db.list<Media>("/story-media/" + storyId);
+    this.mediaListRef.push(media);
+    this.mediaListRef = this.db.list<Media>("/media/" + storyId + "/" + stayId);
+    return this.mediaListRef.push(media);
   }
-
+  getMediaList(storyId, stayId) {
+    this.mediaListRef = this.db.list<Media>("/media/" + storyId + "/" + stayId);
+    return this.mediaListRef;
+  }
+  getMediaListForStory(storyId) {
+    this.mediaListRef = this.db.list<Media>("/story-media/" + storyId);
+    return this.mediaListRef;
+  }
 
 }

@@ -44,7 +44,6 @@ export class HomePage {
     this.user.uid = window.localStorage.getItem('uid');
     this.user.name = window.localStorage.getItem('name');
     this.user.avater = window.localStorage.getItem('avater');
- 
     this.tripList = this.tripListService.getTripList(this.user.uid)
       .snapshotChanges()
       .map(
@@ -74,4 +73,5 @@ export class HomePage {
       ev: myEvent
     });
   }
+
 }

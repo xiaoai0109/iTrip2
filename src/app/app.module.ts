@@ -43,6 +43,7 @@ import { Facebook } from '@ionic-native/facebook';
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireDatabaseModule,
     AngularFireStorageModule,
+    
   ],
   bootstrap: [IonicApp],
   entryComponents: [

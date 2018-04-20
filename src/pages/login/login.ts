@@ -48,15 +48,14 @@ export class LoginPage {
         this.user.name = profile['first_name'];
         this.user.avater = profile['pic']['data']['url'];
         this.userService.updateUser(this.user);
+
         if (this.user) {
-          this.navCtrl.setRoot(HomePage, { user : this.user });
+          this.navCtrl.setRoot(HomePage, { user: this.user });
         }
       });
     })
-    .catch(function(error) {
-      alert(error.message);
-    });
-    
+      .catch(function (error) {
+        alert(error.message);
+      });
   }
-
 }
