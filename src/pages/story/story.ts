@@ -91,7 +91,6 @@ export class StoryPage {
   ref = firebase.database().ref('geos/');
 
   // Inject Ionic Platform and required framework to the constructor
-<<<<<<< HEAD
   constructor(public navCtrl: NavController, public navParams: NavParams, 
     private alertCtrl: AlertController, public datepipe: DatePipe,
     private storyListService: StoryListServiceProvider, public platform: Platform, 
@@ -99,26 +98,6 @@ export class StoryPage {
     private pathListService: PathListServiceProvider, private stayListService: StayListServiceProvider, 
     private mediaListService: MediaListServiceProvider,
     private imageService: CameraServiceProvider) {
-=======
-  constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public datepipe: DatePipe,
-    private storyListService: StoryListServiceProvider, private mediaListService: MediaListServiceProvider, private pathListService: PathListServiceProvider, private stayListService: StayListServiceProvider,
-    public platform: Platform, private geolocation: Geolocation, private device: Device) {
-    // get isStart, if (isStart) => prompt(), addStory(), addStay(First)
-    // all then initMap() => get StayList, 
-    // forEach staylist dropPoint(addMarker, addPath)
-
-    // TakeNewPhoto : TakePhoto => get url, get loc, 
-    //    if (loc - currentLocation > 10), addStay, dropPoint()
-    //    then addMedia to last stay 
-
-    // EndStory : addStay, dropPoint, 
-
-    // dropPoint => (addMarker to map, addListener(click => get photos from MediaList of this stay), 
-    //               push marker to markers, push loc to Path, draw Polyline)
-    // addStay => addStay to DB, genStoryCover()
-
-    // StoryPage.sMediaListService = this.mediaListService;
->>>>>>> fefbc7e81a4f06d4b03494c6d3749f12b062cf8a
     this.tripId = this.navParams.get('tripId');
     let isStart = this.navParams.get('isStart');
     // initialize the map 
@@ -522,24 +501,24 @@ export class StoryPage {
             var loc = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
             var img = 'assets/imgs/marker-example.svg';
             var marker = this.addMarker(loc, img);
-            this.stay.location.lat = this.loc.lat;
-            this.stay.location.long = this.loc.long;
+            this.stay.lat = this.loc.lat;
+            this.stay.long = this.loc.long;
             this.stay.address = ''; //Todo: update later by gg api
             this.stayListService.addStay(this.stay, this.storyListService.getKey());
             
             //Display new point in the path
-            this.path.push(loc);
-            var mPath = new google.maps.Polyline({
-              path: this.path,
-              geodesic: true,
-              strokeColor: '#0000FF',
-              strokeOpacity: 0.7,
-              strokeWeight: 5
-            });
-            mPath.setMap(this.map);
-            //update DB to save this point on the path
-            this.pathListService.addPath(this.loc);
-            this.addPoint(this.loc);
+            // this.path.push(loc);
+            // var mPath = new google.maps.Polyline({
+            //   path: this.path,
+            //   geodesic: true,
+            //   strokeColor: '#0000FF',
+            //   strokeOpacity: 0.7,
+            //   strokeWeight: 5
+            // });
+            // mPath.setMap(this.map);
+            // //update DB to save this point on the path
+            // this.pathListService.addPath(this.loc);
+            // this.addPoint(this.loc);
           }
           
           //Both case (new or current point) we have to save data into firebase

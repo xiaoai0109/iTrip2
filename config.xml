@@ -3,7 +3,7 @@
     <name>iTrip</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.1.108:8101" />
+    <content original-src="index.html" src="http://192.168.1.108:8100" />
     <access origin="*" />
     <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
@@ -95,6 +95,7 @@
     <allow-navigation href="http://172.17.250.10:8100" />
     <plugin name="cordova-plugin-camera" spec="^4.0.3" />
     <allow-navigation href="http://192.168.1.108:8101" />
+    <allow-navigation href="http://192.168.1.108:8100" />
     <engine name="ios" spec="4.5.4" />
     <engine name="android" spec="7.0.0" />
 </widget>
