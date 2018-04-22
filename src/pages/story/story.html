@@ -15,8 +15,8 @@
 <ion-content scroll="false">
   <!-- Slides for Media -->
   <ion-slides pager *ngIf="isMask" (ionSlideDidChange)="slideChanged()" initialSlide="{{slideIndex}}" loop="true">
-    <ion-slide *ngFor="let photo of photos" (click)="closeSlides()">
-      <img [src]="photo" />
+    <ion-slide *ngFor="let photo of photosForStay|async" (click)="closeSlides()">
+      <img [src]="photo.fileUrl" />
       <h2>media.name</h2>
       <p>Location: media.location</p>
     </ion-slide>
@@ -30,8 +30,9 @@
     <h2 class="stay-name">Roller</h2>
     <p class="info">Universial Studio Singapore</p>
     <ion-row class="row-center" nowrap>
-      <ion-col col-2 class="col" *ngFor="let photo of photos; let i = index" (click)="showSlides(i)">
-        <img src="{{photo}}">
+      <ion-col col-2 class="col" *ngFor="let photo of photosForStay | async; let i = index" (click)="showSlides(i)">
+        <!-- <ion-col col-2 class="col" *ngFor="let photo of photosForStay|async; let i = index" (click)="showSlides(i)"> -->
+        <img src="{{photo.fileUrl}}">
       </ion-col>
     </ion-row>
   </ion-item>
@@ -41,7 +42,11 @@
     <ion-item no-lines>
       <p class="story-name">{{story.name}}</p>
       <p class="info">{{stayCount}} stays {{mediaCount}} photos</p>
+<<<<<<< HEAD
       <button ion-button icon-only large item-end (click)="dropImage()">
+=======
+      <button ion-button icon-only large item-end (click)="takeNewPhoto()">
+>>>>>>> fefbc7e81a4f06d4b03494c6d3749f12b062cf8a
         <ion-icon name="camera"></ion-icon>
       </button>
     </ion-item>

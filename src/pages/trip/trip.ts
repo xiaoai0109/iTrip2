@@ -6,6 +6,7 @@ import { Media } from '../../models/media';
 import { StoryPage } from '../../pages/story/story';
 import { Observable } from 'rxjs/Observable';
 import { StoryListServiceProvider } from '../../providers/story-list-service/story-list-service';
+import { MediaListServiceProvider } from '../../providers/media-list-service/media-list-service';
 
 @IonicPage({
   name: 'page-trip'
@@ -34,19 +35,38 @@ export class TripPage {
 
   mediaList: Media[];
 
+  mediaListForStory: Observable<Media[]>;
+  mediaListForTrip : { [index: string]: Observable<Media[]> } = {};
+  // mediaListForTrip = { storyId: [], }; 
+
   isMask: boolean = false;
   slideIndex;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storyListService: StoryListServiceProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storyListService: StoryListServiceProvider, private mediaListService: MediaListServiceProvider) {
     this.trip = this.navParams.get('trip');
 
     this.storyList = this.storyListService.getStoryList(this.trip.key)
       .snapshotChanges()
       .map(
         changes => {
-          return changes.map(c => ({
-            key: c.payload.key, ...c.payload.val()
-          }))
+          return changes.map(c => {
+            this.mediaListForStory = this.mediaListService.getMediaListForStory(c.payload.key).snapshotChanges()
+              .map(
+                changes => {
+                  return changes.map(c => {
+                    return {
+                      key: c.payload.key, ...c.payload.val()
+                    }
+                  })
+                }
+              );
+            this.mediaListForTrip[c.payload.key] = this.mediaListForStory;
+            console.log("c.payload.key",c.payload.key);
+            console.log("mediaListForTrip", this.mediaListForTrip[c.payload.key]);
+            return {
+              key: c.payload.key, ...c.payload.val()
+            }
+          })
         });
 
     this.storyListService.getStoryList(this.trip.key)

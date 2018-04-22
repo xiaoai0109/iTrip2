@@ -45,6 +45,7 @@ import { Camera } from '@ionic-native/camera';
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireDatabaseModule,
     AngularFireStorageModule,
+    
   ],
   bootstrap: [IonicApp],
   entryComponents: [

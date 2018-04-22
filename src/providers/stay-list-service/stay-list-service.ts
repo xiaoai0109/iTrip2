@@ -17,17 +17,16 @@ export class StayListServiceProvider {
   constructor(public http: HttpClient,private db : AngularFireDatabase) {
     console.log('Hello StayListServiceProvider Provider');
   }
-
- getKey(){
-   return this.key;
- }
-  addStay(stay:Stay,storyid){
-    this.stayListRef= this.db.list<Stay>("/Stays/"+storyid);
-    this.key = this.stayListRef.push(stay).key;
- }
- getStayList(){
-   return this.stayListRef;
+  getKey() {
+    return this.key;
   }
-
+  addStay(stay: Stay, storyId: string) {
+    this.stayListRef = this.db.list<Stay>("/stays/" + storyId);
+    this.key = this.stayListRef.push(stay).key;
+  }
+  getStayList(storyId: string) {
+    this.stayListRef = this.db.list<Stay>("/stays/" + storyId);
+    return this.stayListRef;
+  }
 
 }
