@@ -40,6 +40,7 @@ export class TripPage {
   // mediaListForTrip = { storyId: [], }; 
 
   isMask: boolean = false;
+  displayedStoryId: string;
   slideIndex;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private storyListService: StoryListServiceProvider, private mediaListService: MediaListServiceProvider) {
@@ -63,6 +64,7 @@ export class TripPage {
             this.mediaListForTrip[c.payload.key] = this.mediaListForStory;
             console.log("c.payload.key",c.payload.key);
             console.log("mediaListForTrip", this.mediaListForTrip[c.payload.key]);
+
             return {
               key: c.payload.key, ...c.payload.val()
             }
@@ -89,7 +91,8 @@ export class TripPage {
     this.navCtrl.push('page-edit-story', { story: story, tripId: this.trip.key });
   }
 
-  showSlides(index) {
+  showSlides(index, storyId) {
+    this.displayedStoryId = storyId;
     this.isMask = true;
     this.slideIndex = index;
   }

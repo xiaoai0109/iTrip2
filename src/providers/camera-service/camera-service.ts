@@ -20,7 +20,7 @@ export class CameraServiceProvider {
 
   captureImage(){
     const options: CameraOptions = {
-      quality: 50,
+      quality: 30,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
@@ -34,7 +34,7 @@ export class CameraServiceProvider {
     let storageRef: AngularFireStorageReference;
 
     let newName = `${new Date().getTime()}`;
-    storageRef = this.afStorage.ref(`/image/${newName}`);
+    storageRef = this.afStorage.ref(`/image/${newName}.jpg`);
     return storageRef.putString(image, 'base64', { contentType:'jpg'});
   }
 

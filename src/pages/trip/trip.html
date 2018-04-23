@@ -7,8 +7,13 @@
 <ion-content>
   <!-- Slides for Media -->
   <ion-slides pager *ngIf="isMask" (ionSlideDidChange)="slideChanged()" initialSlide="{{slideIndex}}" loop="true">
-    <ion-slide *ngFor="let media of mediaList" (click)="closeSlides()">
+    <!-- <ion-slide *ngFor="let media of mediaList" (click)="closeSlides()">
       <img [src]="media.fileUrl" />
+      <h2 *ngIf="media.name">{{media.name}}</h2>
+      <p>Location: {{media.location}}</p>
+    </ion-slide> -->
+    <ion-slide *ngFor="let media of mediaListForTrip[displayedStoryId] | async" (click)="closeSlides()">
+      <img [src]="media.downloadUrl" />
       <h2 *ngIf="media.name">{{media.name}}</h2>
       <p>Location: {{media.location}}</p>
     </ion-slide>
@@ -59,8 +64,9 @@
               <ion-item-divider>{{story.name}}</ion-item-divider>
               <ion-grid>
                   <ion-row class="row-center">
-                    <ion-col col-4 *ngFor="let media of mediaListForTrip[story.key] | async; let i = index" (click)="showSlides(i)">
-                      <img [src]="media.fileUrl">
+                    <ion-col col-4 *ngFor="let media of mediaListForTrip[story.key] | async; let i = index" (click)="showSlides(i, story.key)">
+                      <img [src]="media.downloadUrl">
+                      <!-- <img [src]="media.fileUrl"> -->
                     </ion-col>
                   </ion-row>
                 </ion-grid>

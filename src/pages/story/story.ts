@@ -17,7 +17,7 @@ import { CameraServiceProvider } from '../../providers/camera-service/camera-ser
 // import { sha256 } from 'sha256';
 
 declare var google;
-const LOCATION_THRESHOLD = 10;
+const LOCATION_THRESHOLD = 20;
 
 @IonicPage({
   name: 'page-story'
@@ -490,35 +490,22 @@ export class StoryPage {
   }
 
   dropImage(){
-    this.geolocation.getCurrentPosition({maximumAge: 3000, timeout: 5000, enableHighAccuracy: true}).then((resp) => {
-      this.loc.lat = resp.coords.latitude;
+    var photoUrl = 'assets/imgs/photo-l.JPG'; //initialized image
+    var image = 'assets/imgs/marker-blue.svg'; //Point logo
+
+    this.geolocation.getCurrentPosition({maximumAge: 3000, timeout: 5000, enableHighAccuracy: true})
+    .then((resp) => {
+      this.loc.lat = resp.coords.latitude; //Save this location
       this.loc.long = resp.coords.longitude;
 
-      this.imageService.captureImage().then(data => { /* Capture image and handle*/
+      this.imageService.captureImage()
+      .then(data => { /* Capture image and handle*/
         let upload = this.imageService.uploadImage(data); /* Upload img to Firebase */
         upload.then().then(res => { //update info to new point or current point
           if(this.getDistance(this.loc, this.currentLocation) > LOCATION_THRESHOLD ){ //New points
-            var loc = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-            var img = 'assets/imgs/marker-example.svg';
-            var marker = this.addMarker(loc, img);
-            this.stay.lat = this.loc.lat;
-            this.stay.long = this.loc.long;
-            this.stay.address = ''; //Todo: update later by gg api
-            this.stayListService.addStay(this.stay, this.storyListService.getKey());
-            
-            //Display new point in the path
-            // this.path.push(loc);
-            // var mPath = new google.maps.Polyline({
-            //   path: this.path,
-            //   geodesic: true,
-            //   strokeColor: '#0000FF',
-            //   strokeOpacity: 0.7,
-            //   strokeWeight: 5
-            // });
-            // mPath.setMap(this.map);
-            // //update DB to save this point on the path
-            // this.pathListService.addPath(this.loc);
-            // this.addPoint(this.loc);
+            //var myLocation = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+            this.currentLocation = this.loc;
+            this.addStay();
           }
           
           //Both case (new or current point) we have to save data into firebase
@@ -528,7 +515,7 @@ export class StoryPage {
           this.media.downloadUrl = res.metadata.downloadURLs[0];
 
           this.photos.push(this.media.fileUrl);
-          this.mediaListService.addMedia(this.media, this.storyListService.getKey(), this.stayListService.getKey());
+          this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
         }); /* Finish update info */
       });/* Finish Capture image and handle*/
 
