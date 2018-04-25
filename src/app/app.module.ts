@@ -30,6 +30,8 @@ import { Facebook } from '@ionic-native/facebook';
 import { CameraServiceProvider } from '../providers/camera-service/camera-service';
 import { Camera } from '@ionic-native/camera';
 
+import { IonicImageLoader } from 'ionic-image-loader';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -45,6 +47,7 @@ import { Camera } from '@ionic-native/camera';
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireDatabaseModule,
     AngularFireStorageModule,
+    IonicImageLoader.forRoot()
     
   ],
   bootstrap: [IonicApp],

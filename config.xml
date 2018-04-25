@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="sg.edu.nus.ionicap" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="sg.edu.nus.iss.test201802" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>iTrip</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.1.108:8100" />
     <access origin="*" />
     <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
@@ -85,7 +85,7 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^1.2.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-facebook4" spec="^1.10.1">
-        <variable name="APP_ID" value="2058286707781563" />
+        <variable name="APP_ID" value="166848030687999" />
         <variable name="APP_NAME" value="iTrip" />
     </plugin>
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
@@ -93,9 +93,8 @@
     </plugin>
     <plugin name="cordova-plugin-device" spec="^2.0.1" />
     <allow-navigation href="http://172.17.250.10:8100" />
-    <plugin name="cordova-plugin-camera" spec="^4.0.3" />
-    <allow-navigation href="http://192.168.1.108:8101" />
-    <engine name="android" spec="7.0.0" />
-    <engine name="ios" spec="~4.5.4" />
     <allow-navigation href="http://192.168.1.108:8100" />
+    <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
+    <engine name="ios" spec="4.5.4" />
+    <engine name="android" spec="7.0.0" />
 </widget>

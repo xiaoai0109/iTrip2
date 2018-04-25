@@ -13,7 +13,8 @@
       <p>Location: {{media.location}}</p>
     </ion-slide> -->
     <ion-slide *ngFor="let media of mediaListForTrip[displayedStoryId] | async" (click)="closeSlides()">
-      <img [src]="media.downloadUrl" />
+      <!-- <img [src]="media.downloadUrl" /> -->
+      <img-loader [src]="media.downloadUrl" useImg></img-loader>
       <h2 *ngIf="media.name">{{media.name}}</h2>
       <p>Location: {{media.location}}</p>
     </ion-slide>
@@ -65,7 +66,8 @@
               <ion-grid>
                   <ion-row class="row-center">
                     <ion-col col-4 *ngFor="let media of mediaListForTrip[story.key] | async; let i = index" (click)="showSlides(i, story.key)">
-                      <img [src]="media.downloadUrl">
+                      <img-loader [src]="media.downloadUrl" useImg></img-loader>
+                      <!-- <img [src]="media.downloadUrl"> -->
                       <!-- <img [src]="media.fileUrl"> -->
                     </ion-col>
                   </ion-row>

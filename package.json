@@ -25,6 +25,8 @@
     "@ionic-native/core": "4.6.0",
     "@ionic-native/device": "^4.7.0",
     "@ionic-native/facebook": "^4.7.0",
+    "@ionic-native/file": "^4.7.0",
+    "@ionic-native/file-transfer": "^4.7.0",
     "@ionic-native/geolocation": "^4.7.0",
     "@ionic-native/splash-screen": "4.6.0",
     "@ionic-native/status-bar": "4.6.0",
@@ -35,6 +37,8 @@
     "cordova-plugin-camera": "^4.0.3",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-facebook4": "^1.10.1",
+    "cordova-plugin-file": "^6.0.1",
+    "cordova-plugin-file-transfer": "^1.7.1",
     "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
     "cordova-plugin-ionic-webview": "^1.2.0",
@@ -42,6 +46,7 @@
     "cordova-plugin-whitelist": "^1.3.3",
     "firebase": "^4.12.1",
     "ionic-angular": "3.9.2",
+    "ionic-image-loader": "^4.2.1",
     "ionicons": "3.0.0",
     "promise-polyfill": "^7.1.2",
     "rxjs": "5.5.8",
@@ -68,7 +73,8 @@
         "APP_ID": "2058286707781563",
         "APP_NAME": "iTrip"
       },
-      "cordova-plugin-camera": {}
+      "cordova-plugin-camera": {},
+      "cordova-plugin-file-transfer": {}
     },
     "platforms": [
       "ios",
