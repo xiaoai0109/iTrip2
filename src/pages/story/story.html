@@ -16,7 +16,8 @@
   <!-- Slides for Media -->
   <ion-slides pager *ngIf="isMask" (ionSlideDidChange)="slideChanged()" initialSlide="{{slideIndex}}" loop="true">
     <ion-slide *ngFor="let photo of photosForStay|async" (click)="closeSlides()">
-      <img [src]="photo.downloadUrl" />
+      <!-- <img [src]="photo.downloadUrl" /> -->
+      <img-loader [src]="photo.downloadUrl" useImg></img-loader>
       <h2>media.name</h2>
       <p>Location: media.location</p>
     </ion-slide>
@@ -32,7 +33,8 @@
     <ion-row class="row-center" nowrap>
       <ion-col col-2 class="col" *ngFor="let photo of photosForStay | async; let i = index" (click)="showSlides(i)">
         <!-- <ion-col col-2 class="col" *ngFor="let photo of photosForStay|async; let i = index" (click)="showSlides(i)"> -->
-        <img [src]="photo.downloadUrl" />
+        <!-- <img [src]="photo.downloadUrl" /> -->
+        <img-loader [src]="photo.downloadUrl" useImg></img-loader>
 
       </ion-col>
     </ion-row>
