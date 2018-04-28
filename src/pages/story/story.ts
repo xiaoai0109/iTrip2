@@ -277,25 +277,38 @@ export class StoryPage {
     // TODO: take photo, get local fileUrl
     var photoUrl = 'assets/imgs/photo-l.JPG';
     var image = 'assets/imgs/marker-blue.svg';
-    this.geolocation.getCurrentPosition({
-      maximumAge: 3000, timeout: 5000,
-      enableHighAccuracy: true
-    }).then((resp) => {
-      var myLocation = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-      this.loc.lat = resp.coords.latitude;
-      this.loc.long = resp.coords.longitude;
-      if (this.getDistance(this.loc, this.currentLocation) > 20) {
 
-        // this.addMarker(myLocation, image);
-        // this.drawPath(myLocation);
-        this.currentLocation = this.loc;
-        this.addStay();
+    //Capture image
+    this.imageService.captureImage()
+    .then(data => {
+      let upload = this.imageService.uploadImage(data); /* Upload to firebase */
+      upload.then().then(res => {
+        photoUrl = res.metadata.fullPath;
+        this.geolocation.getCurrentPosition({ maximumAge: 3000, timeout: 5000, enableHighAccuracy: true })
+        .then((resp) => {
+          var myLocation = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+          this.loc.lat = resp.coords.latitude;
+          this.loc.long = resp.coords.longitude;
+          if (this.getDistance(this.loc, this.currentLocation) > LOCATION_THRESHOLD) { /* New point */
+            // this.addMarker(myLocation, image);
+            // this.drawPath(myLocation);
+            this.currentLocation = this.loc;
+            this.addStay();
+          }
 
-      }
-      // add Media to DB
-      this.media.fileUrl = photoUrl;
-      this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
+        });
+        // add Media to DB
+        this.media.fileUrl = photoUrl;
+        this.media.location = this.stay;
+        this.media.createdDate = res.metadata.timeCreated;
+        this.media.downloadUrl = res.metadata.downloadURLs[0]
+
+        this.photos.push(this.media.fileUrl);
+        this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
+      });
     });
+    
+    
 
   }
 
