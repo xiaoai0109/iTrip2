@@ -305,6 +305,7 @@ export class StoryPage {
 
         this.photos.push(this.media.fileUrl);
         this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
+        console.log('storyId, stayId, mediaId', this.story.key + ' ' + this.stay.key + ' ' + this.media.key);
       });
     });
     
@@ -529,6 +530,7 @@ export class StoryPage {
 
           this.photos.push(this.media.fileUrl);
           this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
+          console.log('storyId, stayId, mediaId', this.story.key + ' ' + this.stay.key + ' ' + this.media.key);
         }); /* Finish update info */
       });/* Finish Capture image and handle*/
 
@@ -537,8 +539,37 @@ export class StoryPage {
     
   } /* End of dropImage() */
 
+  dropNewPhoto() {
+    // TODO: take photo, get local fileUrl
+    var image = 'assets/imgs/marker-blue.svg';
+    this.imageService.captureImage()
+    .then(data => {
+      let upload = this.imageService.uploadImage(data); /* Upload to firebase */
+      upload.then().then(res => {
+        this.media.fileUrl = res.metadata.fullPath; 
+        this.media.downloadUrl = res.metadata.downloadURLs[0];
+      })});
 
-
+    
+    this.geolocation.getCurrentPosition({
+      maximumAge: 3000, timeout: 5000,
+      enableHighAccuracy: true
+    }).then((resp) => {
+      var myLocation = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+      this.loc.lat = resp.coords.latitude;
+      this.loc.long = resp.coords.longitude;
+      if (this.getDistance(this.loc, this.currentLocation) > LOCATION_THRESHOLD) {
+ 
+        // this.addMarker(myLocation, image);
+        // this.drawPath(myLocation);
+        this.currentLocation = this.loc;
+        this.addStay();
+ 
+      }
+      // add Media to DB
+      this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
+    });
+  }
 } /* End of Class StoryPage */
 
 // Get the list of other position
