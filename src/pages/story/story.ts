@@ -328,6 +328,7 @@ export class StoryPage {
 
         this.photos.push(this.media.fileUrl);
         this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
+        console.log('storyId, stayId, mediaId', this.story.key + ' ' + this.stay.key + ' ' + this.media.key);
       });
     });
     
@@ -586,6 +587,7 @@ export class StoryPage {
 
           this.photos.push(this.media.fileUrl);
           this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
+          console.log('storyId, stayId, mediaId', this.story.key + ' ' + this.stay.key + ' ' + this.media.key);
         }); /* Finish update info */
       });/* Finish Capture image and handle*/
 
@@ -619,8 +621,6 @@ export class StoryPage {
     });
     
   } /* End of dropImage() */
-
-
 
 
 } /* End of Class StoryPage */
