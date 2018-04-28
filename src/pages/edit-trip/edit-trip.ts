@@ -13,10 +13,9 @@ import { User } from '../../models/user';
   templateUrl: 'edit-trip.html',
 })
 export class EditTripPage {
-  // uid : string = '';
 
-  user : User;
-  trip : Trip = {
+  user: User;
+  trip: Trip = {
     name: '',
     description: '',
     createdDate: ''
@@ -24,7 +23,6 @@ export class EditTripPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
     private tripListService: TripListServiceProvider) {
-    // this.uid = this.navParams.get('uid');
     this.user = this.navParams.get('user');
     this.trip = this.navParams.get('trip');
   }
@@ -35,13 +33,13 @@ export class EditTripPage {
 
   updateTrip(trip: Trip) {
     this.tripListService.updateTrip(trip, this.user.uid).then(() => {
-      this.navCtrl.setRoot(HomePage, { user : this.user });
+      this.navCtrl.setRoot(HomePage, { user: this.user });
     })
   }
 
   removeTrip(trip: Trip) {
     this.tripListService.removeTrip(trip, this.user.uid).then(() => {
-      this.navCtrl.setRoot(HomePage, { user : this.user });
+      this.navCtrl.setRoot(HomePage, { user: this.user });
     })
   }
 
@@ -53,12 +51,15 @@ export class EditTripPage {
         {
           text: 'Cancel',
           handler: () => {
-          }},
+          }
+        },
         {
           text: 'Yes',
           handler: () => {
             this.removeTrip(trip);
-          }}]});
+          }
+        }]
+    });
     confirm.present();
   }
 

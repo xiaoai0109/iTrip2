@@ -1,12 +1,11 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Trip</ion-title>
+    <ion-title>New Trip</ion-title>
     <ion-buttons end>
       <button ion-button strong color="danger" (click)="addTrip(trip)" [disabled]="trip.name == ''">Create</button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-
 
 <ion-content padding>
   <ion-item>
@@ -18,5 +17,3 @@
     <ion-textarea type="text" class="description" [(ngModel)]="trip.description" placeholder="e.g. I am going to there for 3 days!"></ion-textarea>
   </ion-item>
 </ion-content>
-
-<!-- text-center padding -->

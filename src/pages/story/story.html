@@ -5,35 +5,26 @@
       <button ion-button color="danger" (click)="endStory()" strong>
         End</button>
     </ion-buttons>
-    <ion-buttons end>
-      <button ion-button strong (click)="change()">
-        Change</button>
-    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content scroll="false">
+<ion-content class="no-scroll">
   <!-- Slides for Media -->
-  <ion-slides pager *ngIf="isMask" (ionSlideDidChange)="slideChanged()" initialSlide="{{slideIndex}}" loop="true">
-    <ion-slide *ngFor="let photo of photosForStay|async" (click)="closeSlides()">
-      <!-- <img [src]="photo.downloadUrl" /> -->
+  <ion-slides pager *ngIf="isMask" initialSlide="{{slideIndex}}" loop="false">
+    <ion-slide *ngFor="let photo of photosForStay | async" (click)="closeSlides()">
       <img-loader [src]="photo.downloadUrl" useImg></img-loader>
-      <p>photo.location</p>
+      <!-- <p>photo.location</p> -->
     </ion-slide>
   </ion-slides>
 
-  <div #map id="map" *ngIf="!isMask"></div>
+  <div #map id="map"></div>
 
   <!-- for stay info -->
-  <!--<ion-item class="stay-detail" *ngIf="isShow" (click)="change()"> -->
-  <ion-item class="stay-detail" *ngIf="isShow" (click)="change()">
-    <p class="info">{{stayDisplay}}</p>
+  <ion-item class="stay-detail" *ngIf="isShow">
+    <p class="info">Location {{stayAddress}}</p>
     <ion-row class="row-center" nowrap>
       <ion-col col-2 class="col" *ngFor="let photo of photosForStay | async; let i = index" (click)="showSlides(i)">
-        <!-- <ion-col col-2 class="col" *ngFor="let photo of photosForStay|async; let i = index" (click)="showSlides(i)"> -->
-        <!-- <img [src]="photo.downloadUrl" /> -->
         <img-loader [src]="photo.downloadUrl" useImg></img-loader>
-
       </ion-col>
     </ion-row>
   </ion-item>
@@ -42,7 +33,7 @@
   <ion-footer class="footer" *ngIf="!isMask">
     <ion-item no-lines>
       <p class="story-name">{{story.name}}</p>
-      <p class="info">{{stayCount}} stays {{mediaCount}} photos</p>
+      <p class="info">{{(stayList | async)?.length ? (stayList | async)?.length : 0}} stays {{photoCount}} photos</p>
       <button ion-button icon-only large item-end (click)="dropImage()">
         <ion-icon name="camera"></ion-icon>
       </button>

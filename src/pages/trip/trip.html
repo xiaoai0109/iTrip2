@@ -6,24 +6,17 @@
 
 <ion-content>
   <!-- Slides for Media -->
-  <ion-slides pager *ngIf="isMask" (ionSlideDidChange)="slideChanged()" initialSlide="{{slideIndex}}" loop="true">
-    <!-- <ion-slide *ngFor="let media of mediaList" (click)="closeSlides()">
-      <img [src]="media.fileUrl" />
-      <h2 *ngIf="media.name">{{media.name}}</h2>
-      <p>Location: {{media.location}}</p>
-    </ion-slide> -->
+  <ion-slides pager *ngIf="isMask" initialSlide="{{slideIndex}}" loop="false">
     <ion-slide *ngFor="let media of mediaListForTrip[displayedStoryId] | async" (click)="closeSlides()">
-      <!-- <img [src]="media.downloadUrl" /> -->
       <img-loader [src]="media.downloadUrl" useImg></img-loader>
-      <h2 *ngIf="media.name">{{media.name}}</h2>
-      <p>Location: {{media.location}}</p>
+      <p class="media-location">Location: {{media.location}}</p>
     </ion-slide>
   </ion-slides>
 
   <!-- Trip Info -->
   <ion-item no-lines *ngIf="!isMask">
     <div class="trip-name">{{trip.name}}</div>
-    <div class="date">{{trip.createdDate}} - {{trip.createdDate}}</div>
+    <div class="date">{{trip.createdDate}}{{(storyList | async)?.length ? ' - ' + (storyList | async)?.reverse()[0].createdDate : ''}}</div>
     <button item-end ion-button icon-start color="secondary" (click)="startStory()">
       <ion-icon name="play"></ion-icon>
       Start</button>
@@ -32,7 +25,7 @@
   <!-- Segment setting for stories and photos -->
   <ion-segment [(ngModel)]="selectedSegment" padding-left="1px" padding-right="1px" *ngIf="!isMask">
     <ion-segment-button value="stories">
-      Stories ({{storyCount}})
+      Stories ({{(storyList | async)?.length}})
     </ion-segment-button>
     <ion-segment-button value="photos">
       Photos ({{photoCount}})
@@ -40,18 +33,18 @@
   </ion-segment>
 
   <!-- Default Segment -->
-  <div [ngSwitch]="selectedSegment" class="content-background" *ngIf="!isMask">
+  <div [ngSwitch]="selectedSegment" *ngIf="!isMask">
     <!-- Segment: stories -->
     <div *ngSwitchCase="'stories'">
-      <ion-card *ngFor="let story of storyList | async" background-color="light">
+      <ion-card *ngFor="let story of (storyList | async)?.reverse()" background-color="light">
         <div (click)="navToStory(story)">
-            <ion-item class="story-name">{{story.name}}</ion-item>
-            <img [src]="story.cover">
-            <ion-item *ngIf="story.description" class="story-description">{{story.description}}</ion-item>
+          <ion-item class="story-name">{{story.name}}</ion-item>
+          <img [src]="story.cover">
+          <ion-item *ngIf="story.description" class="story-description">{{story.description}}</ion-item>
         </div>
         <ion-item>
-          <div class="info" item-start>8 stays</div>
-          <div class="info" item-start>18 photos</div>
+          <div class="info" item-start>{{stayCount[story.key]}} stays</div>
+          <div class="info" item-start>{{(mediaListForTrip[story.key] | async)?.length}} photos</div>
           <button ion-button outline small item-end (click)="editStory(story)">Edit</button>
         </ion-item>
       </ion-card>
@@ -59,33 +52,19 @@
 
     <!-- Segment: photos (Grid View) s-->
     <div *ngSwitchCase="'photos'">
-
-        <ion-list>
-            <ion-item-group *ngFor="let story of storyList | async">
-              <ion-item-divider>{{story.name}}</ion-item-divider>
-              <ion-grid>
-                  <ion-row class="row-center">
-                    <ion-col col-4 *ngFor="let media of mediaListForTrip[story.key] | async; let i = index" (click)="showSlides(i, story.key)">
-                      <img-loader [src]="media.downloadUrl" useImg></img-loader>
-                      <!-- <img [src]="media.downloadUrl"> -->
-                      <!-- <img [src]="media.fileUrl"> -->
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-            </ion-item-group>
-          </ion-list>
-
-      <!-- <ion-grid>
-        <ion-row class="row-center">
-          <ion-col col-4 *ngFor="let media of mediaList; let i = index" (click)="showSlides(i)">
-            <img [src]="media.fileUrl">
-          </ion-col>
-        </ion-row>
-      </ion-grid> -->
+      <ion-list padding>
+        <ion-item-group class="photo-divider" *ngFor="let story of (storyList | async)?.reverse()">
+          <ion-item-divider class="story-name">{{story.name}}</ion-item-divider>
+          <ion-grid>
+            <ion-row class="row-center">
+              <ion-col col-4 *ngFor="let media of mediaListForTrip[story.key] | async; let i = index" (click)="showSlides(i, story.key)">
+                <img-loader [src]="media.downloadUrl" useImg></img-loader>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item-group>
+      </ion-list>
     </div>
   </div>
 
 </ion-content>
-
-
-<!-- style="overflow: hidden; height: 90px"  -->

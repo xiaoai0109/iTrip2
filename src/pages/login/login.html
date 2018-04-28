@@ -1,13 +1,11 @@
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>Login</ion-title>
-  </ion-navbar>
-
 </ion-header>
 
-<ion-content padding>
-  <button ion-button outline block (click)="loginWithFB()">
-    Facebook Login 
+<ion-content padding class="content-background">
+  <p class="app-name">&nbsp;&nbsp;iTrip</p>
+  <img src="assets/imgs/icon.png" />
+  <button ion-button block icon-start class="login_button" (click)="loginWithFB()">
+    <ion-icon name="logo-facebook"></ion-icon>
+    &nbsp;&nbsp;&nbsp;&nbsp;Login
   </button>
 </ion-content>

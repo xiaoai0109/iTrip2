@@ -4,7 +4,6 @@
       iTrip
     </ion-title>
     <ion-buttons end>
-      <!-- <button ion-button clear color="dark" (click)="presentPopover($event)"> -->
       <button ion-button clear icon-only small color="dark" (click)="presentPopover($event)">
         <ion-icon name="more">
         </ion-icon>
@@ -13,7 +12,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content class="content-background">
+<ion-content>
 
   <ion-item no-lines>
     <ion-avatar item-start>
@@ -29,7 +28,7 @@
     </button>
   </ion-item>
 
-  <ion-card *ngFor="let trip of tripList | async">
+  <ion-card *ngFor="let trip of (tripList | async)?.reverse()">
 
     <ion-item (click)="navToTrip(trip)">
       <div class="trip-name">{{trip.name}}</div>
@@ -39,7 +38,7 @@
     <ion-item>
       <div class="trip-user" item-start>{{user.name}}</div>
       <div class="trip-date">created on {{trip.createdDate}}</div>
-      <button ion-button outline small color="primary" item-end z-index="1" (click)="editTrip(trip)">
+      <button ion-button outline small color="primary" item-end (click)="editTrip(trip)">
         Edit
       </button>
     </ion-item>

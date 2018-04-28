@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewController, NavController } from 'ionic-angular';
-import * as firebase from 'firebase';
-import { AuthService } from '../../services/auth.service';
+// import * as firebase from 'firebase';
+// import { AuthService } from '../../services/auth.service';
 import { LoginPage } from '../../pages/login/login';
 import { HomePage } from '../../pages/home/home';
 import { Facebook } from '@ionic-native/facebook';
@@ -13,7 +13,7 @@ import { Facebook } from '@ionic-native/facebook';
 export class PopoverComponent {
 
   constructor(public viewCtrl: ViewController, public navCtrl: NavController,
-    private auth: AuthService, private facebook: Facebook) {
+    private facebook: Facebook) {
 
   }
 

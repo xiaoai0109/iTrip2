@@ -1,7 +1,4 @@
 page-trip {
-    .content-background {
-        // background-color: #f4f4f4;
-    }
     .trip-name {
         color: red;
         font-size: 14pt;
@@ -21,6 +18,10 @@ page-trip {
         color: hotpink;
         font-size: 12pt;
     }
+    .media-location {
+        color: lightslategray;
+        font-size: 12pt;
+    }
     .info {
         color: gray;
         font-size: 8pt; 
@@ -29,6 +30,9 @@ page-trip {
         color: gray;
         font-size: 8pt;
         padding: 2px; 
+    }
+    .photo-divider {
+        background-color: transparent;
     }
     .row-center {
         align-items: center;

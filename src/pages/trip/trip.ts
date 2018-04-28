@@ -7,6 +7,7 @@ import { StoryPage } from '../../pages/story/story';
 import { Observable } from 'rxjs/Observable';
 import { StoryListServiceProvider } from '../../providers/story-list-service/story-list-service';
 import { MediaListServiceProvider } from '../../providers/media-list-service/media-list-service';
+import { StayListServiceProvider } from '../../providers/stay-list-service/stay-list-service';
 
 @IonicPage({
   name: 'page-trip'
@@ -26,24 +27,21 @@ export class TripPage {
     createdDate: ''
   }
 
-  storyList: Observable<Story[]>;
-
-  // static data below
-  userName: string = "Peiyan";
   storyCount: number = 0;
-  photoCount: number = 15;
+  photoCount: number = 0;
+  mediaCount: { [index: string]: number } = {};
+  stayCount: { [index: string]: number } = {};
 
-  mediaList: Media[];
-
+  storyList: Observable<Story[]>;
   mediaListForStory: Observable<Media[]>;
   mediaListForTrip : { [index: string]: Observable<Media[]> } = {};
-  // mediaListForTrip = { storyId: [], }; 
 
   isMask: boolean = false;
   displayedStoryId: string;
-  slideIndex;
+  slideIndex: number;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storyListService: StoryListServiceProvider, private mediaListService: MediaListServiceProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storyListService: StoryListServiceProvider, 
+    private stayListService: StayListServiceProvider, private mediaListService: MediaListServiceProvider) {
     this.trip = this.navParams.get('trip');
 
     this.storyList = this.storyListService.getStoryList(this.trip.key)
@@ -61,22 +59,27 @@ export class TripPage {
                   })
                 }
               );
-            this.mediaListForTrip[c.payload.key] = this.mediaListForStory;
-            console.log("c.payload.key",c.payload.key);
-            console.log("mediaListForTrip", this.mediaListForTrip[c.payload.key]);
 
+            this.mediaListForTrip[c.payload.key] = this.mediaListForStory;
+            this.mediaListForStory.subscribe(result => {
+              this.mediaCount[c.payload.key] = result.length;
+              this.photoCount = 0;
+              for (var key in this.mediaCount) {
+                  this.photoCount += this.mediaCount[key];   
+              }
+            });
+
+            this.stayListService.getStayList(c.payload.key).snapshotChanges()
+            .subscribe(result => {
+              this.stayCount[c.payload.key] = result.length;
+            })
+            
             return {
               key: c.payload.key, ...c.payload.val()
             }
           })
         });
 
-    this.storyListService.getStoryList(this.trip.key)
-      .snapshotChanges()
-      .subscribe(keys => {
-        this.storyCount = 0;
-        keys.forEach(key => this.storyCount = this.storyCount + 1)
-      });
   }
 
   navToStory(story: Story) {
@@ -99,10 +102,6 @@ export class TripPage {
 
   closeSlides() {
     this.isMask = false;
-  }
-
-  slideChanged() {
-    let currentIndex = this.slides.getActiveIndex();
   }
 
   ionViewDidLoad() {

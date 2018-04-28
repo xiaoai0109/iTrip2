@@ -4,12 +4,6 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { Stay } from '../../models/stay';
 import { NavParams } from 'ionic-angular';
 
-/*
-  Generated class for the StayListServiceProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class StayListServiceProvider {
   private stayListRef;

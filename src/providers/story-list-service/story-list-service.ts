@@ -9,36 +9,40 @@ export class StoryListServiceProvider {
   private storyListRef;
   private key;
 
-  constructor(public http: HttpClient, private db : AngularFireDatabase) {
+  constructor(public http: HttpClient, private db: AngularFireDatabase) {
     console.log('Hello StoryListServiceProvider Provider');
-        // need to pass tripId to constructor
-        //let tripId = 'ttt';
-        //this.storyListRef = this.db.list<Story>('/stories/' + tripId);
   }
 
-  getKey(){
+  getKey() {
     return this.key;
   }
 
-  getStoryList(tripId : string) {
+  getStoryList(tripId: string) {
     this.storyListRef = this.db.list<Story>('/stories/' + tripId);
     return this.storyListRef;
   }
 
-  addStory(story : Story, tripId : string) {
+  addStory(story: Story, tripId: string) {
     this.storyListRef = this.db.list<Story>('/stories/' + tripId);
-   this.key = this.storyListRef.push(story).key;
+    this.key = this.storyListRef.push(story).key;
   }
 
-  updateStory(story : Story, tripId : string) {
+  updateStory(story: Story, tripId: string) {
     this.storyListRef = this.db.list<Story>('/stories/' + tripId);
     return this.storyListRef.update(story.key, story);
   }
 
-  removeStory(story : Story, tripId : string) {
+  removeStory(storyId: string, tripId: string) {
+    // remove all the stays and media of this story
+    this.storyListRef = this.db.list<Story>('/stays/');
+    this.storyListRef.remove(storyId);
+    // this.storyListRef.remove(story.key);
+    this.storyListRef = this.db.list<Story>('/media/');
+    this.storyListRef.remove(storyId);
+    this.storyListRef = this.db.list<Story>('/story-media/');
+    this.storyListRef.remove(storyId);
     this.storyListRef = this.db.list<Story>('/stories/' + tripId);
-    // also need to remove the stays and media
-    return this.storyListRef.remove(story.key);
+    return this.storyListRef.remove(storyId);
   }
 
 }

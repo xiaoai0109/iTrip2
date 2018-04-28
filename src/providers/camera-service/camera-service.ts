@@ -4,12 +4,6 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { AngularFireStorage, AngularFireStorageReference } from 'angularfire2/storage';
 import { AngularFireDatabase } from 'angularfire2/database';
 
-/*
-  Generated class for the CameraProvideProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class CameraServiceProvider {
 
