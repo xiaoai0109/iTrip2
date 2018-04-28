@@ -14,10 +14,11 @@ import { StayListServiceProvider } from '../../providers/stay-list-service/stay-
 import { Stay } from '../../models/stay';
 import { MediaListServiceProvider } from '../../providers/media-list-service/media-list-service';
 import { CameraServiceProvider } from '../../providers/camera-service/camera-service';
+import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 // import { sha256 } from 'sha256';
 
 declare var google;
-const LOCATION_THRESHOLD = 20;
+const LOCATION_THRESHOLD = 5;
 
 @IonicPage({
   name: 'page-story'
@@ -27,7 +28,7 @@ const LOCATION_THRESHOLD = 20;
   templateUrl: 'story.html',
 })
 export class StoryPage {
-  image: Observable<any>;
+  // image: Observable<any>;
   
   @ViewChild(Slides) slides: Slides;
 
@@ -38,6 +39,7 @@ export class StoryPage {
   isMask: boolean = false;
   slideIndex;
   firstStay: boolean = true;
+  IsInitMap = true;
 
   isShow: boolean = false;
   counter_stay = 0;
@@ -54,6 +56,8 @@ export class StoryPage {
   // static data above
 
   tripId: string = '';
+  isStart:boolean = true;
+  stayDisplay:string ='';
 
   story: Story = {
     name: '',
@@ -69,7 +73,7 @@ export class StoryPage {
   };
   media: Media = {
     fileUrl: '',
-    location: this.stay,
+    location: '',
     createdDate: '',
     downloadUrl: '',
   }
@@ -89,6 +93,7 @@ export class StoryPage {
   // static sMediaListService;
   // path = [];
   ref = firebase.database().ref('geos/');
+  image = 'assets/imgs/marker-red.svg';
 
   // Inject Ionic Platform and required framework to the constructor
   constructor(public navCtrl: NavController, public navParams: NavParams, 
@@ -97,21 +102,24 @@ export class StoryPage {
     private geolocation: Geolocation, private device: Device, 
     private pathListService: PathListServiceProvider, private stayListService: StayListServiceProvider, 
     private mediaListService: MediaListServiceProvider,
-    private imageService: CameraServiceProvider) {
+    private imageService: CameraServiceProvider,private nativeGeocoder: NativeGeocoder) {
     this.tripId = this.navParams.get('tripId');
-    let isStart = this.navParams.get('isStart');
+    this.isStart = this.navParams.get('isStart');
     // initialize the map 
-    this.geolocation.getCurrentPosition({
-      maximumAge: 3000, timeout: 5000,
-      enableHighAccuracy: true
-    }).then((resp) => {
-      var myLocation = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-      this.map = new google.maps.Map(this.mapElement.nativeElement, {
-        zoom: 15,
-        center: myLocation
+    
+    if (this.isStart) {
+      this.geolocation.getCurrentPosition({
+        maximumAge: 3000, timeout: 5000,
+        enableHighAccuracy: true
+      }).then((resp) => {
+        var myLocation = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+        this.map = new google.maps.Map(this.mapElement.nativeElement, {
+          zoom: 15,
+          center: myLocation
+        });
+        this.currentLocation.lat = resp.coords.latitude;
+        this.currentLocation.long = resp.coords.longitude;
       });
-    });
-    if (isStart) {
       this.presentPrompt();
     } else {
       this.story = this.navParams.get('story');
@@ -134,43 +142,57 @@ export class StoryPage {
         }
       );
     // View the story, get all the points of the path from db and display
-
+    
     this.firstStay = true;
-    var IsInitMap = true;
+
+  
     this.stayList.subscribe(stayList => stayList.forEach(element => {
-      if (IsInitMap) {
+      console.log("fetch stay element "+element.key+" "+element.lat);
+      if(this.IsInitMap){
         this.addMarkerandPath(element);
       }
 
 
 
     }));
-
-    IsInitMap = false;
+  
+      
   }
-  addMarkerandPath(element) {
-
+  addMarkerandPath(element){
+    this.stay = element;  
     console.log('this.stay ', this.stay.key);
 
     var myLocation = new google.maps.LatLng(element.lat, element.long);
     var loc = { lat: element.lat, long: element.long };
     console.log('loc.lat', loc.lat);
     if (this.firstStay) {
+        if(!this.isStart)
+        {
+          var myLocation = new google.maps.LatLng(element.lat, element.long);
+          this.map = new google.maps.Map(this.mapElement.nativeElement, {
+          zoom: 15,
+          center: myLocation
+        }); 
+        }
       // this.map = new google.maps.Map(this.mapElement.nativeElement, {
       //   zoom: 15,
       //   center: myLocation
       // });
-      var image = 'assets/imgs/marker-red.svg';
-      this.addMarker(myLocation, image);
+          /*if(this.IsInitMap){
+            this.map = new google.maps.Map(this.mapElement.nativeElement, {
+              zoom: 15,
+              center: myLocation
+            });
+          }*/
+      this.addMarker(myLocation, this.image);
       console.log('add marker ?', myLocation);
       this.drawPath(myLocation);
       this.firstStay = false;
 
     } else {
-      var image = 'assets/imgs/marker-green.svg';
-      this.addMarker(myLocation, image);
+      this.addMarker(myLocation, this.image);
       this.drawPath(myLocation);
-      console.log('add marker ?', image);
+      console.log('add marker ?', this.image);
     }
     this.currentLocation = loc;
 
@@ -198,11 +220,12 @@ export class StoryPage {
     // console.log('addMarker?', 'yes');
     this.markers.push(marker);
     var me = this;
-    google.maps.event.addListener(marker, 'click', (function (story_key, stay_key) {
+    google.maps.event.addListener(marker, 'click', (function (story_key, stay) {
       {
         return function () {
-          console.log("listener clicked for " + stay_key)
-          me.photosForStay = me.mediaListService.getMediaList(story_key, stay_key).snapshotChanges()
+          me.stayDisplay = stay.address;
+          console.log("listener clicked for " + stay.key)
+          me.photosForStay = me.mediaListService.getMediaList(story_key, stay.key).snapshotChanges()
             .map(
               changes => {
                 return changes.map(c => {
@@ -214,7 +237,7 @@ export class StoryPage {
           
         }
       }
-    })(this.story.key, this.stay.key));
+    })(this.story.key, this.stay));
 
     //     google.maps.event.addListener(marker, 'click', (function(story_key,stay_key) {
     //       {
@@ -276,7 +299,7 @@ export class StoryPage {
   takeNewPhoto() {
     // TODO: take photo, get local fileUrl
     var photoUrl = 'assets/imgs/photo-l.JPG';
-    var image = 'assets/imgs/marker-blue.svg';
+    // var image = 'assets/imgs/marker-blue.svg';
 
     //Capture image
     this.imageService.captureImage()
@@ -299,7 +322,7 @@ export class StoryPage {
         });
         // add Media to DB
         this.media.fileUrl = photoUrl;
-        this.media.location = this.stay;
+        this.media.location = this.stay.address;
         this.media.createdDate = res.metadata.timeCreated;
         this.media.downloadUrl = res.metadata.downloadURLs[0]
 
@@ -446,7 +469,7 @@ export class StoryPage {
             this.storyListService.addStory(this.story, this.tripId);
             this.story.key = this.storyListService.getKey();
             console.log('start story.key', this.story.key);
-            // this.addStay();
+            this.addStay();
 
             this.platform.ready().then(() => {
               this.initMap();
@@ -464,17 +487,16 @@ export class StoryPage {
   }
 
   addStay() {
-
+      this.IsInitMap = false;
     //Add the first stay to DB 
     //Story must have been created at this point
     this.stay.lat = this.currentLocation.lat;
     this.stay.long = this.currentLocation.long;
-    this.stay.address = "Singapore";
     console.log('addStay story.key', this.story.key);
     this.stayListService.addStay(this.stay, this.story.key);
     this.stay.key = this.stayListService.getKey();
     console.log('addStay stay.key', this.stay.key);
-    this.addMarkerandPath(this.currentLocation);
+    this.addMarkerandPath(this.stay);
     // generate cover for this story
     // this.genStoryCover(this.currentLocation); currentLocation = {lat: x, long: y}
     var newLocation: Location = { lat: this.stay.lat, long: this.stay.long };
@@ -500,30 +522,65 @@ export class StoryPage {
 
   slideChanged() {
     let currentIndex = this.slides.getActiveIndex();
+    
   }
 
   dropImage(){
     var photoUrl = 'assets/imgs/photo-l.JPG'; //initialized image
     var image = 'assets/imgs/marker-blue.svg'; //Point logo
-
     this.geolocation.getCurrentPosition({maximumAge: 3000, timeout: 5000, enableHighAccuracy: true})
     .then((resp) => {
       this.loc.lat = resp.coords.latitude; //Save this location
       this.loc.long = resp.coords.longitude;
+      if(this.getDistance(this.loc, this.currentLocation) > LOCATION_THRESHOLD ){ //New points
+        //var myLocation = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+        this.currentLocation = this.loc;
+        this.addStay();
+      }
 
       this.imageService.captureImage()
       .then(data => { /* Capture image and handle*/
         let upload = this.imageService.uploadImage(data); /* Upload img to Firebase */
         upload.then().then(res => { //update info to new point or current point
-          if(this.getDistance(this.loc, this.currentLocation) > LOCATION_THRESHOLD ){ //New points
-            //var myLocation = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-            this.currentLocation = this.loc;
-            this.addStay();
-          }
+          //Both case (new or current point) we have to save data into firebase
+          this.media.fileUrl = res.metadata.fullPath;
+          //this.media.location = this.stay;
+          this.media.createdDate = res.metadata.timeCreated;
+          this.media.downloadUrl = res.metadata.downloadURLs[0];
+
+          this.photos.push(this.media.fileUrl);
+          this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
+          console.log('storyId, stayId, mediaId', this.story.key + ' ' + this.stay.key + ' ' + this.media.key);
+        }); /* Finish update info */
+      });/* Finish Capture image and handle*/
+
+      
+    });
+    
+} /* End of dropImage() */
+
+  dropImage_temp(){
+    var photoUrl = 'assets/imgs/photo-l.JPG'; //initialized image
+    // var image = 'assets/imgs/marker-blue.svg'; //Point logo
+
+    this.geolocation.getCurrentPosition({maximumAge: 3000, timeout: 5000, enableHighAccuracy: true})
+    .then((resp) => {
+      this.loc.lat = resp.coords.latitude; //Save this location
+      this.loc.long = resp.coords.longitude;
+      if(this.getDistance(this.loc, this.currentLocation) > LOCATION_THRESHOLD ){ //New points
+        //var myLocation = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+        this.currentLocation = this.loc;
+        this.nativeGeocoder.reverseGeocode(this.loc.lat, this.loc.long)
+        .then((result: NativeGeocoderReverseResult) => { this.stay.address= result.countryName;
+          this.addStay();
+          this.imageService.captureImage()
+      .then(data => { /* Capture image and handle*/
+        let upload = this.imageService.uploadImage(data); /* Upload img to Firebase */
+        upload.then().then(res => { //update info to new point or current point
           
           //Both case (new or current point) we have to save data into firebase
           this.media.fileUrl = res.metadata.fullPath;
-          this.media.location = this.stay;
+          this.media.location = this.stay.address;
           this.media.createdDate = res.metadata.timeCreated;
           this.media.downloadUrl = res.metadata.downloadURLs[0];
 
@@ -532,10 +589,37 @@ export class StoryPage {
         }); /* Finish update info */
       });/* Finish Capture image and handle*/
 
+        });
+      
+
+        
+      }
+      else
+      {
+        this.imageService.captureImage()
+      .then(data => { /* Capture image and handle*/
+        let upload = this.imageService.uploadImage(data); /* Upload img to Firebase */
+        upload.then().then(res => { //update info to new point or current point
+          
+          //Both case (new or current point) we have to save data into firebase
+          this.media.fileUrl = res.metadata.fullPath;
+          this.media.location = this.stay.address;
+          this.media.createdDate = res.metadata.timeCreated;
+          this.media.downloadUrl = res.metadata.downloadURLs[0];
+
+          this.photos.push(this.media.fileUrl);
+          this.mediaListService.addMedia(this.media, this.story.key, this.stay.key);
+        });
+      });
+      
+
+    }
+      
       
     });
     
   } /* End of dropImage() */
+
 
 
 

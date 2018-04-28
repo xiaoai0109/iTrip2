@@ -2,7 +2,7 @@
   <ion-navbar>
     <ion-title>Story</ion-title>
     <ion-buttons end>
-      <button ion-button color="danger" (click)="dropPoint()" strong>
+      <button ion-button color="danger" (click)="endStory()" strong>
         End</button>
     </ion-buttons>
     <ion-buttons end>
@@ -18,8 +18,7 @@
     <ion-slide *ngFor="let photo of photosForStay|async" (click)="closeSlides()">
       <!-- <img [src]="photo.downloadUrl" /> -->
       <img-loader [src]="photo.downloadUrl" useImg></img-loader>
-      <h2>media.name</h2>
-      <p>Location: media.location</p>
+      <p>photo.location</p>
     </ion-slide>
   </ion-slides>
 
@@ -28,8 +27,7 @@
   <!-- for stay info -->
   <!--<ion-item class="stay-detail" *ngIf="isShow" (click)="change()"> -->
   <ion-item class="stay-detail" *ngIf="isShow" (click)="change()">
-    <h2 class="stay-name">Roller</h2>
-    <p class="info">Universial Studio Singapore</p>
+    <p class="info">{{stayDisplay}}</p>
     <ion-row class="row-center" nowrap>
       <ion-col col-2 class="col" *ngFor="let photo of photosForStay | async; let i = index" (click)="showSlides(i)">
         <!-- <ion-col col-2 class="col" *ngFor="let photo of photosForStay|async; let i = index" (click)="showSlides(i)"> -->
@@ -45,7 +43,7 @@
     <ion-item no-lines>
       <p class="story-name">{{story.name}}</p>
       <p class="info">{{stayCount}} stays {{mediaCount}} photos</p>
-      <button ion-button icon-only large item-end (click)="takeNewPhoto()">
+      <button ion-button icon-only large item-end (click)="dropImage()">
         <ion-icon name="camera"></ion-icon>
       </button>
     </ion-item>

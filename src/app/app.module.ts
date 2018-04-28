@@ -29,6 +29,7 @@ import { MediaListServiceProvider } from '../providers/media-list-service/media-
 import { Facebook } from '@ionic-native/facebook';
 import { CameraServiceProvider } from '../providers/camera-service/camera-service';
 import { Camera } from '@ionic-native/camera';
+import {NativeGeocoder,NativeGeocoderReverseResult} from '@ionic-native/native-geocoder';
 
 import { IonicImageLoader } from 'ionic-image-loader';
 
@@ -62,6 +63,7 @@ import { IonicImageLoader } from 'ionic-image-loader';
     SplashScreen,
     Geolocation,
     Device,
+    NativeGeocoder,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DatePipe,
     TripListServiceProvider,
