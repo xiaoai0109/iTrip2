@@ -77,7 +77,7 @@
       "cordova-plugin-file-transfer": {},
       "cordova-plugin-file": {},
       "cordova-plugin-nativegeocoder": {
-        "LOCATION_WHEN_IN_USE_DESCRIPTION": "Use geocoder service"
+        "LOCATION_WHEN_IN_USE_DESCRIPTION": ""
       },
       "cordova-plugin-facebook4": {
         "APP_ID": "166848030687999",

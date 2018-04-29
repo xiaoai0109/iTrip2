@@ -9,7 +9,7 @@
   <ion-slides pager *ngIf="isMask" initialSlide="{{slideIndex}}" loop="false">
     <ion-slide *ngFor="let media of mediaListForTrip[displayedStoryId] | async" (click)="closeSlides()">
       <img-loader [src]="media.downloadUrl" useImg></img-loader>
-      <p class="media-location">Location: {{media.location}}</p>
+      <p class="media-location">{{media.location}}</p>
     </ion-slide>
   </ion-slides>
 
@@ -25,7 +25,7 @@
   <!-- Segment setting for stories and photos -->
   <ion-segment [(ngModel)]="selectedSegment" padding-left="1px" padding-right="1px" *ngIf="!isMask">
     <ion-segment-button value="stories">
-      Stories ({{(storyList | async)?.length}})
+      Stories ({{(storyList | async)?.length ? (storyList | async)?.length : 0}})
     </ion-segment-button>
     <ion-segment-button value="photos">
       Photos ({{photoCount}})
@@ -36,7 +36,7 @@
   <div [ngSwitch]="selectedSegment" *ngIf="!isMask">
     <!-- Segment: stories -->
     <div *ngSwitchCase="'stories'">
-      <ion-card *ngFor="let story of (storyList | async)?.reverse()" background-color="light">
+      <ion-card *ngFor="let story of (storyList | async)" background-color="light">
         <div (click)="navToStory(story)">
           <ion-item class="story-name">{{story.name}}</ion-item>
           <img [src]="story.cover">
@@ -53,7 +53,7 @@
     <!-- Segment: photos (Grid View) s-->
     <div *ngSwitchCase="'photos'">
       <ion-list padding>
-        <ion-item-group class="photo-divider" *ngFor="let story of (storyList | async)?.reverse()">
+        <ion-item-group class="photo-divider" *ngFor="let story of (storyList | async)">
           <ion-item-divider class="story-name">{{story.name}}</ion-item-divider>
           <ion-grid>
             <ion-row class="row-center">

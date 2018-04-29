@@ -5,8 +5,6 @@ import { TripPage } from '../../pages/trip/trip';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { TripListServiceProvider } from '../../providers/trip-list-service/trip-list-service';
-// import * as firebase from 'firebase';
-// import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user';
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 import { PopoverComponent } from '../../components/popover/popover';
@@ -22,7 +20,7 @@ export class HomePage {
   user: User = {
     uid: '',
     name: '',
-    avater: ''
+    avatar: ''
   };
 
   constructor(public navCtrl: NavController, public db: AngularFireDatabase, private popoverCtrl: PopoverController, private navParams: NavParams,
@@ -31,7 +29,7 @@ export class HomePage {
     // load user from local storage
     this.user.uid = window.localStorage.getItem('uid');
     this.user.name = window.localStorage.getItem('name');
-    this.user.avater = window.localStorage.getItem('avater');
+    this.user.avatar = window.localStorage.getItem('avatar');
     this.tripList = this.tripListService.getTripList(this.user.uid)
       .snapshotChanges()
       .map(

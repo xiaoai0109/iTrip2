@@ -27,7 +27,7 @@ import { MediaListServiceProvider } from '../providers/media-list-service/media-
 import { Facebook } from '@ionic-native/facebook';
 import { CameraServiceProvider } from '../providers/camera-service/camera-service';
 import { Camera } from '@ionic-native/camera';
-import {NativeGeocoder,NativeGeocoderReverseResult} from '@ionic-native/native-geocoder';
+import { NativeGeocoder, NativeGeocoderReverseResult } from '@ionic-native/native-geocoder';
 
 import { IonicImageLoader } from 'ionic-image-loader';
 
@@ -37,7 +37,7 @@ import { IonicImageLoader } from 'ionic-image-loader';
     HomePage,
     LoginPage,
     PopoverComponent
-    
+
   ],
   imports: [
     BrowserModule,
@@ -47,7 +47,7 @@ import { IonicImageLoader } from 'ionic-image-loader';
     AngularFireDatabaseModule,
     AngularFireStorageModule,
     IonicImageLoader.forRoot()
-    
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -62,7 +62,7 @@ import { IonicImageLoader } from 'ionic-image-loader';
     Geolocation,
     Device,
     NativeGeocoder,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     DatePipe,
     TripListServiceProvider,
     StoryListServiceProvider,
@@ -75,4 +75,4 @@ import { IonicImageLoader } from 'ionic-image-loader';
     Camera
   ]
 })
-export class AppModule {}
+export class AppModule { }

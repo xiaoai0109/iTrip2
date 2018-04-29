@@ -38,6 +38,7 @@ export class EditStoryPage {
   }
 
   removeStory(story: Story) {
+    this.storyListService.removeMediaOfStory(story.key, this.tripId); 
     this.storyListService.removeStory(story.key, this.tripId).then(() => {
       this.navCtrl.pop();
     })

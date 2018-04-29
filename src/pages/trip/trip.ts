@@ -34,13 +34,13 @@ export class TripPage {
 
   storyList: Observable<Story[]>;
   mediaListForStory: Observable<Media[]>;
-  mediaListForTrip : { [index: string]: Observable<Media[]> } = {};
+  mediaListForTrip: { [index: string]: Observable<Media[]> } = {};
 
   isMask: boolean = false;
   displayedStoryId: string;
   slideIndex: number;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storyListService: StoryListServiceProvider, 
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storyListService: StoryListServiceProvider,
     private stayListService: StayListServiceProvider, private mediaListService: MediaListServiceProvider) {
     this.trip = this.navParams.get('trip');
 
@@ -65,15 +65,15 @@ export class TripPage {
               this.mediaCount[c.payload.key] = result.length;
               this.photoCount = 0;
               for (var key in this.mediaCount) {
-                  this.photoCount += this.mediaCount[key];   
+                this.photoCount += this.mediaCount[key];
               }
             });
 
             this.stayListService.getStayList(c.payload.key).snapshotChanges()
-            .subscribe(result => {
-              this.stayCount[c.payload.key] = result.length;
-            })
-            
+              .subscribe(result => {
+                this.stayCount[c.payload.key] = result.length;
+              })
+
             return {
               key: c.payload.key, ...c.payload.val()
             }

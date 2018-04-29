@@ -32,14 +32,17 @@ export class StoryListServiceProvider {
     return this.storyListRef.update(story.key, story);
   }
 
-  removeStory(storyId: string, tripId: string) {
+  removeMediaOfStory(storyId: string, tripId: string) {
     // remove all the stays and media of this story
     this.storyListRef = this.db.list<Story>('/stays/');
     this.storyListRef.remove(storyId);
     this.storyListRef = this.db.list<Story>('/media/');
     this.storyListRef.remove(storyId);
     this.storyListRef = this.db.list<Story>('/story-media/');
-    this.storyListRef.remove(storyId);
+    return this.storyListRef.remove(storyId);
+  }
+
+  removeStory(storyId: string, tripId: string) {
     this.storyListRef = this.db.list<Story>('/stories/' + tripId);
     return this.storyListRef.remove(storyId);
   }

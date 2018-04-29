@@ -23,8 +23,6 @@ export class MyApp {
       this.imageLoaderConfig.setFallbackUrl('assets/imgs/loading.gif');
       this.imageLoaderConfig.setMaximumCacheAge(24 * 60 * 60 * 1000);
 
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
       this.checkPreviousAuthorization();
@@ -33,7 +31,7 @@ export class MyApp {
   checkPreviousAuthorization(): void {
     if ((window.localStorage.getItem('uid') === "undefined" || window.localStorage.getItem('uid') === null) &&
       (window.localStorage.getItem('name') === "undefined" || window.localStorage.getItem('name') === null) &&
-      (window.localStorage.getItem('avater') === "undefined" || window.localStorage.getItem('avater') === null)) {
+      (window.localStorage.getItem('avatar') === "undefined" || window.localStorage.getItem('avatar') === null)) {
       this.rootPage = LoginPage;
     } else {
       this.rootPage = HomePage;

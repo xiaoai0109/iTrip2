@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-// import { HttpClient } from '@angular/common/http';
 import { Trip } from '../../models/trip';
 import { DatePipe } from '@angular/common';
 import { TripListServiceProvider } from '../../providers/trip-list-service/trip-list-service';

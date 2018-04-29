@@ -1,5 +1,3 @@
-import { Stay } from "./stay";
-
 export interface Media {
     key?: string;
     name?: string;

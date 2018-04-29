@@ -14,7 +14,7 @@ export class UserServiceProvider {
   updateUser(user : User) {
     window.localStorage.setItem('uid', user.uid);
     window.localStorage.setItem('name', user.name);
-    window.localStorage.setItem('avater', user.avater);
+    window.localStorage.setItem('avatar', user.avatar);
     this.userListRef = this.db.list<User>('/users/');
     return this.userListRef.update(user.uid, user);
   }

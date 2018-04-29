@@ -16,7 +16,7 @@
 
   <ion-item no-lines>
     <ion-avatar item-start>
-      <img [src]="user.avater">
+      <img [src]="user.avatar">
     </ion-avatar>
     <div class="user-name">{{user.name}}</div>
   </ion-item>
@@ -28,7 +28,7 @@
     </button>
   </ion-item>
 
-  <ion-card *ngFor="let trip of (tripList | async)?.reverse()">
+  <ion-card *ngFor="let trip of (tripList | async)">
 
     <ion-item (click)="navToTrip(trip)">
       <div class="trip-name">{{trip.name}}</div>

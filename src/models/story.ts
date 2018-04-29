@@ -4,6 +4,4 @@ export interface Story {
     description?: string;
     createdDate: string;
     cover?: string;
-    // pinCount: number;
-    // photoCount: number;
 }

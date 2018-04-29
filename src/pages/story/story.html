@@ -1,10 +1,6 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Story</ion-title>
-    <ion-buttons end>
-      <button ion-button color="danger" (click)="endStory()" strong>
-        End</button>
-    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -21,7 +17,7 @@
 
   <!-- for stay info -->
   <ion-item class="stay-detail" *ngIf="isShow">
-    <!-- <p class="info">Location {{stayAddress}}</p> -->
+    <p class="info">{{stayAddress}}</p>
     <ion-row class="row-center" nowrap>
       <ion-col col-2 class="col" *ngFor="let photo of photosForStay | async; let i = index" (click)="showSlides(i)">
         <img-loader [src]="photo.downloadUrl" useImg></img-loader>

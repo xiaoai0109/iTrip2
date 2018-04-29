@@ -4,6 +4,9 @@ import { Trip } from '../../models/trip';
 import { TripListServiceProvider } from '../../providers/trip-list-service/trip-list-service';
 import { HomePage } from '../home/home';
 import { User } from '../../models/user';
+import { Observable } from 'rxjs/Observable';
+import { Story } from '../../models/story';
+import { StoryListServiceProvider } from '../../providers/story-list-service/story-list-service';
 
 @IonicPage({
   name: 'page-edit-trip'
@@ -20,11 +23,23 @@ export class EditTripPage {
     description: '',
     createdDate: ''
   };
+  storyList: Observable<Story[]>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
-    private tripListService: TripListServiceProvider) {
+    private tripListService: TripListServiceProvider, private storyListService: StoryListServiceProvider) {
     this.user = this.navParams.get('user');
     this.trip = this.navParams.get('trip');
+
+    this.storyList = this.storyListService.getStoryList(this.trip.key).snapshotChanges()
+    .map(
+      changes => {
+        return changes.map(c => {
+          return {
+            key: c.payload.key, ...c.payload.val()
+          }
+        })
+      }
+    );
   }
 
   ionViewDidLoad() {
@@ -38,9 +53,16 @@ export class EditTripPage {
   }
 
   removeTrip(trip: Trip) {
+    this.storyList.forEach(stories => {
+      stories.forEach(story => {
+        console.log('remove story', story.key);
+        this.storyListService.removeMediaOfStory(story.key, trip.key);
+      })
+    });
+    
     this.tripListService.removeTrip(trip, this.user.uid).then(() => {
       this.navCtrl.setRoot(HomePage, { user: this.user });
-    })
+    });
   }
 
   showDeleteConfirm(trip: Trip) {

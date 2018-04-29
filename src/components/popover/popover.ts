@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { ViewController, NavController } from 'ionic-angular';
-// import * as firebase from 'firebase';
-// import { AuthService } from '../../services/auth.service';
 import { LoginPage } from '../../pages/login/login';
 import { HomePage } from '../../pages/home/home';
 import { Facebook } from '@ionic-native/facebook';
@@ -23,7 +21,7 @@ export class PopoverComponent {
         () => {
           window.localStorage.removeItem('uid');
           window.localStorage.removeItem('name');
-          window.localStorage.removeItem('avater');
+          window.localStorage.removeItem('avatar');
           this.navCtrl.setRoot(LoginPage);
           this.navCtrl.popToRoot();
         }

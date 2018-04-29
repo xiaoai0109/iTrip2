@@ -1,14 +1,14 @@
 export const FIREBASE_CONFIG = {
     // Team's firebase
-    apiKey: "AIzaSyBtHIEh0x0Mvox6srmHhiSMnoe6Qo6lPBw",
-    authDomain: "sg4207-55956.firebaseapp.com",
-    databaseURL: "https://sg4207-55956.firebaseio.com",
-    projectId: "sg4207-55956",
-    storageBucket: "sg4207-55956.appspot.com",
-    messagingSenderId: "363649901411"
+    apiKey: "AIzaSyAAJ3au8BtpSLE7TvtQK9h9PYb8xaj-yro",
+    authDomain: "sg4207-a8f60.firebaseapp.com",
+    databaseURL: "https://sg4207-a8f60.firebaseio.com",
+    projectId: "sg4207-a8f60",
+    storageBucket: "sg4207-a8f60.appspot.com",
+    messagingSenderId: "556976966320"
   };
 
-      // Toshi's firebase
+    // Toshi's firebase
     // apiKey: "AIzaSyDqIvG4TElxDNMjQt1kPb1LhNtnZRWvz8M",
     // authDomain: "itrip-a2416.firebaseapp.com",
     // databaseURL: "https://itrip-a2416.firebaseio.com",
