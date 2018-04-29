@@ -79,12 +79,12 @@
       "cordova-plugin-nativegeocoder": {
         "LOCATION_WHEN_IN_USE_DESCRIPTION": ""
       },
+      "cordova-plugin-statusbar": {},
       "cordova-plugin-facebook4": {
         "APP_ID": "166848030687999",
         "APP_NAME": "iTrip",
         "ANDROID_SDK_VERSION": "4.+"
-      },
-      "cordova-plugin-statusbar": {}
+      }
     },
     "platforms": [
       "ios",

@@ -2,7 +2,7 @@
 <widget id="sg.edu.nus.iss.test201802" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>iTrip</name>
     <description>An awesome app to make your travel memories last forever.</description>
-    <author email="se26.sg4207.ft03@gmail.com" href="https://www.iss.nus.edu.sg/">SG4207 Full Time Team 02</author>
+    <author email="se26.sg4207.ft02@gmail.com" href="https://www.iss.nus.edu.sg/">SG4207 Full Time Team 02</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="*" />
@@ -95,13 +95,13 @@
     <plugin name="cordova-plugin-nativegeocoder" spec="^3.1.1">
         <variable name="LOCATION_WHEN_IN_USE_DESCRIPTION" value="" />
     </plugin>
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
+    <allow-navigation href="http://172.17.133.28:8100" />
     <plugin name="cordova-plugin-facebook4" spec="^2.0.1">
         <variable name="APP_ID" value="166848030687999" />
         <variable name="APP_NAME" value="iTrip" />
         <variable name="ANDROID_SDK_VERSION" value="4.+" />
     </plugin>
-    <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <engine name="ios" spec="4.5.4" />
-    <allow-navigation href="http://172.17.133.28:8100" />
-    <engine name="android" spec="~7.0.0" />
+    <engine name="android" spec="7.0.0" />
 </widget>
