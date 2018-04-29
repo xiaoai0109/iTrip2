@@ -16,7 +16,7 @@ import { CameraServiceProvider } from '../../providers/camera-service/camera-ser
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 
 declare var google;
-const LOCATION_THRESHOLD = 5;
+const LOCATION_THRESHOLD = 10;
 
 @IonicPage({
   name: 'page-story'
@@ -40,14 +40,9 @@ export class StoryPage {
   firstStay: boolean = true;
   IsInitMap = true;
 
-  // photos: string[] = ["assets/imgs/photo-l.JPG"];
-  // static photos: string[] = [];
-  // photos: string[] = [];
-  // story_photos: string[][] = [[]];
-
   stayCount: number = 0;
   photoCount: number = 0;
-  
+
   stayAddress: string = '';
 
   tripId: string = '';
@@ -87,7 +82,7 @@ export class StoryPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private alertCtrl: AlertController, public datepipe: DatePipe,
     private storyListService: StoryListServiceProvider, public platform: Platform,
-    private geolocation: Geolocation, 
+    private geolocation: Geolocation,
     private stayListService: StayListServiceProvider, private mediaListService: MediaListServiceProvider,
     private imageService: CameraServiceProvider, private nativeGeocoder: NativeGeocoder) {
 
@@ -184,22 +179,30 @@ export class StoryPage {
 
   addStay() {
     this.IsInitMap = false;
-    //Story must have been created at this point
+    var stay: Stay = {
+      lat: 0,
+      long: 0,
+      address: ''
+    };
     this.stay.lat = this.currentLocation.lat;
     this.stay.long = this.currentLocation.long;
+    stay.lat = this.stay.lat;
+    stay.long = this.stay.long;
     console.log('addStay story.key', this.story.key);
-    this.stayListService.addStay(this.stay, this.story.key);
+    this.stayListService.addStay(stay, this.story.key);
     this.stay.key = this.stayListService.getKey();
     console.log('addStay stay.key', this.stay.key);
     this.addMarkerandPath(this.stay);
     // generate cover for this story
     var newLocation: Location = { lat: this.stay.lat, long: this.stay.long };
     this.genStoryCover(newLocation);
+
   }
 
   genStoryCover(location) {
     // var API_key = "AIzaSyDenrrtx-cvyF7Nl6Xb-dABsneP6f2mm3o";
-    var API_key = "AIzaSyBNqJryyNoAtZp0LwqFz6ABzS2bBMh6u10";
+    // var API_key = "AIzaSyBNqJryyNoAtZp0LwqFz6ABzS2bBMh6u10";
+    var API_key = "AIzaSyD7q4sdr3Hi4mD7A1Kx4gm0GqrQaeQjK34";
     this.story.cover = "https://maps.googleapis.com/maps/api/staticmap?center=" + location.lat + "," + location.long + "&zoom=12&size=400x100&scale=2&markers=color:red%7Clabel:S%7C" + this.currentLocation.lat + "," + this.currentLocation.long + "&key=" + API_key + "&path=color:0x0000ff|weight:5";
     this.story.cover = this.story.cover + "|" + location.lat + "," + location.long;
     this.storyListService.updateStory(this.story, this.tripId);
@@ -310,7 +313,7 @@ export class StoryPage {
             }); /* Finish update info */
           })
           .catch(function (error) {
-            
+
           });/* Finish Capture image and handle*/
 
 

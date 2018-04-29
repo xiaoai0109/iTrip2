@@ -1,5 +1,14 @@
 export const FIREBASE_CONFIG = {
-    // Toshi's firebase
+    // Team's firebase
+    apiKey: "AIzaSyBtHIEh0x0Mvox6srmHhiSMnoe6Qo6lPBw",
+    authDomain: "sg4207-55956.firebaseapp.com",
+    databaseURL: "https://sg4207-55956.firebaseio.com",
+    projectId: "sg4207-55956",
+    storageBucket: "sg4207-55956.appspot.com",
+    messagingSenderId: "363649901411"
+  };
+
+      // Toshi's firebase
     // apiKey: "AIzaSyDqIvG4TElxDNMjQt1kPb1LhNtnZRWvz8M",
     // authDomain: "itrip-a2416.firebaseapp.com",
     // databaseURL: "https://itrip-a2416.firebaseio.com",
@@ -16,11 +25,9 @@ export const FIREBASE_CONFIG = {
     // messagingSenderId: "381475199385"
 
     //Sydc's Firebase
-    apiKey: "AIzaSyD89fXy8jqhZzTKJdeviaFmnQkomlMO1WA",
-    authDomain: "sg4207-c5692.firebaseapp.com",
-    databaseURL: "https://sg4207-c5692.firebaseio.com",
-    projectId: "sg4207-c5692",
-    storageBucket: "sg4207-c5692.appspot.com",
-    messagingSenderId: "133779126478"
-  
-  };
+    // apiKey: "AIzaSyD89fXy8jqhZzTKJdeviaFmnQkomlMO1WA",
+    // authDomain: "sg4207-c5692.firebaseapp.com",
+    // databaseURL: "https://sg4207-c5692.firebaseio.com",
+    // projectId: "sg4207-c5692",
+    // storageBucket: "sg4207-c5692.appspot.com",
+    // messagingSenderId: "133779126478"

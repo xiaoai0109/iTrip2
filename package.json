@@ -46,6 +46,7 @@
     "cordova-plugin-ionic-webview": "^1.2.1",
     "cordova-plugin-nativegeocoder": "^3.1.1",
     "cordova-plugin-splashscreen": "^5.0.2",
+    "cordova-plugin-statusbar": "^2.4.2",
     "cordova-plugin-whitelist": "^1.3.3",
     "firebase": "^4.12.1",
     "ionic-angular": "3.9.2",
@@ -82,7 +83,8 @@
         "APP_ID": "166848030687999",
         "APP_NAME": "iTrip",
         "ANDROID_SDK_VERSION": "4.+"
-      }
+      },
+      "cordova-plugin-statusbar": {}
     },
     "platforms": [
       "ios",

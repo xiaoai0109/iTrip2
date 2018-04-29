@@ -36,7 +36,6 @@ export class StoryListServiceProvider {
     // remove all the stays and media of this story
     this.storyListRef = this.db.list<Story>('/stays/');
     this.storyListRef.remove(storyId);
-    // this.storyListRef.remove(story.key);
     this.storyListRef = this.db.list<Story>('/media/');
     this.storyListRef.remove(storyId);
     this.storyListRef = this.db.list<Story>('/story-media/');

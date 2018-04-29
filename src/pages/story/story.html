@@ -21,7 +21,7 @@
 
   <!-- for stay info -->
   <ion-item class="stay-detail" *ngIf="isShow">
-    <p class="info">Location {{stayAddress}}</p>
+    <!-- <p class="info">Location {{stayAddress}}</p> -->
     <ion-row class="row-center" nowrap>
       <ion-col col-2 class="col" *ngFor="let photo of photosForStay | async; let i = index" (click)="showSlides(i)">
         <img-loader [src]="photo.downloadUrl" useImg></img-loader>

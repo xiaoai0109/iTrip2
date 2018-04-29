@@ -3,16 +3,12 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Trip } from '../../models/trip';
 import { NavParams } from 'ionic-angular';
-import { StoryListServiceProvider } from '../story-list-service/story-list-service';
-import { Observable } from 'rxjs/Observable';
-import { Story } from '../../models/story';
 
 @Injectable()
 export class TripListServiceProvider {
   private tripListRef;
-  private storyList: Observable<Story[]>;
 
-  constructor(public http: HttpClient, private db : AngularFireDatabase, private storyListService : StoryListServiceProvider) {
+  constructor(public http: HttpClient, private db : AngularFireDatabase) {
     console.log('Hello TripListServiceProvider Provider');
   }
 
@@ -32,19 +28,6 @@ export class TripListServiceProvider {
   }
 
   removeTrip(trip : Trip, uid : string) {
-    
-    // this.storyList = this.storyListService.getStoryList(trip.key).snapshotChanges()
-    //   .map(
-    //     changes => {
-    //       return changes.map(c => {
-    //         this.storyListService.removeStory(c.payload.key, trip.key)
-    //         return {
-    //           key: c.payload.key, ...c.payload.val()
-    //         }
-    //       })
-    //     }
-    //   );
-
     let storyListRef = this.db.list<Trip>('/stories/');
     storyListRef.remove(trip.key);
     this.tripListRef = this.db.list<Trip>('/user-trips/' + uid);
