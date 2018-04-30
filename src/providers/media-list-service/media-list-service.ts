@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Media } from '../../models/media';
-import { NavParams } from 'ionic-angular';
 
 @Injectable()
 export class MediaListServiceProvider {

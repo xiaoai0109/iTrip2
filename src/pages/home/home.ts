@@ -6,9 +6,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { TripListServiceProvider } from '../../providers/trip-list-service/trip-list-service';
 import { User } from '../../models/user';
-import { UserServiceProvider } from '../../providers/user-service/user-service';
 import { PopoverComponent } from '../../components/popover/popover';
-import { Facebook } from '@ionic-native/facebook';
 
 @Component({
   selector: 'page-home',
@@ -23,8 +21,8 @@ export class HomePage {
     avatar: ''
   };
 
-  constructor(public navCtrl: NavController, public db: AngularFireDatabase, private popoverCtrl: PopoverController, private navParams: NavParams,
-    private facebook: Facebook, private userService: UserServiceProvider, private tripListService: TripListServiceProvider) {
+  constructor(public navCtrl: NavController, public db: AngularFireDatabase, private popoverCtrl: PopoverController, private navParams: NavParams, 
+    private tripListService: TripListServiceProvider) {
 
     // load user from local storage
     this.user.uid = window.localStorage.getItem('uid');

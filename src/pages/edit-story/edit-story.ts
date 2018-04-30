@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Story } from '../../models/story';
 import { StoryListServiceProvider } from '../../providers/story-list-service/story-list-service';
-import { HomePage } from '../home/home';
 
 @IonicPage({
   name : 'page-edit-story'

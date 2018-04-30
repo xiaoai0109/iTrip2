@@ -14,7 +14,7 @@ import { CameraServiceProvider } from '../../providers/camera-service/camera-ser
 import { NativeGeocoder, NativeGeocoderReverseResult } from '@ionic-native/native-geocoder';
 
 declare var google;
-const LOCATION_THRESHOLD = 10;
+const LOCATION_THRESHOLD = 50;
 
 @IonicPage({
   name: 'page-story'
@@ -207,8 +207,6 @@ export class StoryPage {
   }
 
   genStoryCover(location) {
-    // var API_key = "AIzaSyDenrrtx-cvyF7Nl6Xb-dABsneP6f2mm3o";
-    // var API_key = "AIzaSyBNqJryyNoAtZp0LwqFz6ABzS2bBMh6u10";
     var API_key = "AIzaSyC93QkNUKekNQzipjvk2DLOtiq81mPjhQU";
     this.story.cover = "https://maps.googleapis.com/maps/api/staticmap?center=" + location.lat + "," + location.long + "&zoom=12&size=400x100&scale=2&markers=color:red%7Clabel:S%7C" + this.currentLocation.lat + "," + this.currentLocation.long + "&key=" + API_key + "&path=color:0x0000ff|weight:5";
     this.story.cover = this.story.cover + "|" + location.lat + "," + location.long;
@@ -301,9 +299,9 @@ export class StoryPage {
               var stringify = JSON.stringify(result[0]);
               var add = JSON.parse(stringify);
               this.stay.address = add.locality + ", " + add.countryName;
-              if (add.subThoroughfare) {
-                this.stay.address = add.subThoroughfare + ", " + this.stay.address;
-              }
+              // if (add.subThoroughfare) {
+              //   this.stay.address = add.subThoroughfare + ", " + this.stay.address;
+              // }
               if (add.thoroughfare) {
                 this.stay.address = add.thoroughfare + ", " + this.stay.address;
               }

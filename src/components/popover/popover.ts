@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ViewController, NavController } from 'ionic-angular';
 import { LoginPage } from '../../pages/login/login';
-import { HomePage } from '../../pages/home/home';
 import { Facebook } from '@ionic-native/facebook';
 
 @Component({
