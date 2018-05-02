@@ -7,7 +7,7 @@
 <ion-content class="no-scroll">
   <!-- Slides for Media -->
   <ion-slides pager *ngIf="isMask" initialSlide="{{slideIndex}}" loop="false">
-    <ion-slide *ngFor="let photo of photosForStay | async" (click)="closeSlides()">
+    <ion-slide class="background-white" *ngFor="let photo of photosForStay | async" (click)="closeSlides()">
       <img-loader [src]="photo.downloadUrl" useImg></img-loader>
       <!-- <p>photo.location</p> -->
     </ion-slide>
